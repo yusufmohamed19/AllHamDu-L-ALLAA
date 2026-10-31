@@ -1,10 +1,19 @@
-const V="yawmi-v4",F=["./","./index.html","./manifest.json","./icons/icon-192.png","./icons/icon-512.png"];
+const V="yawmi-v5",F=["./","./index.html","./manifest.json","./icons/icon-192.png","./icons/icon-512.png","./icons/icon-maskable-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(F)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
-// network-first: دايمًا أحدث نسخة لو فيه نت، ولو مفيش يرجع للنسخة المحفوظة
+const wait=ms=>new Promise((_,r)=>setTimeout(r,ms));
+// أوفلاين أولًا: الملفات المحفوظة بتفتح فورًا (حتى من غير نت)، وبتتحدّث في الخلفية لما يكون فيه نت
 self.addEventListener("fetch",e=>{
   if(e.request.method!=="GET")return;
-  const u=new URL(e.request.url);
-  if(u.origin!==location.origin)return;
-  e.respondWith(fetch(e.request).then(n=>{const c=n.clone();caches.open(V).then(x=>x.put(e.request,c));return n}).catch(()=>caches.match(e.request).then(r=>r||caches.match("./index.html"))));
+  if(new URL(e.request.url).origin!==location.origin)return;
+  e.respondWith((async()=>{
+    const c=await caches.open(V),nav=e.request.mode==="navigate";
+    const hit=await c.match(e.request,{ignoreSearch:true})||(nav?await c.match("./index.html"):null);
+    const net=fetch(e.request).then(r=>{if(r&&r.ok)c.put(e.request,r.clone());return r});
+    if(hit){
+      if(nav){try{return await Promise.race([net,wait(2500)])}catch(_){return hit}}
+      net.catch(()=>{});return hit;
+    }
+    try{return await net}catch(_){return Response.error()}
+  })());
 });

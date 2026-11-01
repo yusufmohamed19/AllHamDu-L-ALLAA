@@ -55,11 +55,28 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 #go{background:#fff;color:var(--pri);font-weight:700}#no{background:transparent;color:#fff}
 .toast{position:fixed;top:10px;top:calc(10px + env(safe-area-inset-top,0px));left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);max-width:92%;text-align:center;background:var(--tx);color:var(--bg);padding:8px 16px;border-radius:20px;font-size:14px;display:none;z-index:10}
 
-.az{display:grid;grid-template-columns:repeat(4,1fr);grid-gap:8px;gap:8px;margin:14px 0 4px}
+.az{display:grid;grid-template-columns:repeat(5,1fr);grid-gap:6px;gap:6px;margin:14px 0 4px}
 .azc{position:relative;width:100%;height:0;padding:0 0 100%;border:0;background:none;cursor:pointer;color:var(--tx);font:inherit}
 .azc svg{position:absolute;top:0;left:0;width:100%;height:100%;transform:rotate(-90deg)}
 .azc .in{position:absolute;top:7%;left:7%;right:7%;bottom:7%;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px;line-height:1.35}
-.azc b{font-size:12px}.azc small{font-size:10.5px;color:var(--mut)}
+.azc b{font-size:11px}.azc small{font-size:10px;color:var(--mut)}
+.azc.qr .in{border:0}.azc.qr b{color:var(--pri)}.azc.qr.all b{color:#fff}
+.qi{display:block;padding:12px 14px 14px}.qi .bd{display:block}
+.qh{font-size:13px;color:var(--mut);text-align:center;border-bottom:1px solid var(--ln);padding-bottom:4px;margin-bottom:6px}
+.qt{font-family:"Amiri","Noto Naskh Arabic","Scheherazade New","Traditional Arabic","Geeza Pro",serif;font-size:23px;line-height:2.5;text-align:justify;-webkit-text-align-last:center;text-align-last:center;word-spacing:1px;-webkit-user-select:text;user-select:text}
+.qt .sh{display:block;text-align:center;font-size:20px;font-weight:700;color:var(--pri);border:1.5px solid var(--pri);border-radius:12px;margin:10px 0 2px;line-height:2}
+.qt .bs{display:block;text-align:center;font-size:22px;line-height:2.3}
+.qt .an{color:var(--pri);font-size:19px}
+.qb{display:block;width:100%;margin-top:10px;border:2px solid var(--pri);background:var(--card);color:var(--pri);border-radius:14px;padding:10px;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.qi.ok .qb{background:var(--pri);color:#fff}
+.khm{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:40;display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.khm.show{display:flex}
+.khb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 16px 12px;max-width:760px;width:100%;margin:0 auto;text-align:center}
+.khb h2{margin:6px 0;font-size:24px;color:var(--pri)}.khb .sb{color:var(--mut);font-size:14px;margin:0 0 14px}
+.khb .du{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:14px 16px;margin-bottom:12px;font-size:18px;line-height:2.1;text-align:right}
+.khf{padding:10px 16px calc(14px + env(safe-area-inset-bottom,0px));max-width:760px;width:100%;margin:0 auto}
+.khf button{width:100%;border:0;border-radius:14px;padding:12px;font:inherit;font-size:16px;font-weight:700;background:var(--pri);color:#fff;cursor:pointer}
+.khf button.g{background:none;color:var(--pri);border:1px dashed var(--pri);font-size:14px;font-weight:400;margin-bottom:8px}
 .mot{margin:10px 0 4px}.mot textarea{width:100%;display:block;resize:none;overflow:hidden;border:1.5px dashed var(--pri);background:var(--card);color:var(--tx);border-radius:14px;padding:10px 14px;font:inherit;font-size:16px;font-weight:600;line-height:1.7;text-align:center;min-height:58px}
 .mot textarea::placeholder{color:var(--mut);font-weight:400}
 .dn{border:1px solid var(--pri);background:none;color:var(--pri);border-radius:10px;font:inherit;font-size:13px;padding:4px 14px;cursor:pointer;margin-top:4px}.dn.on{background:var(--pri);color:#fff}
@@ -118,9 +135,14 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 <div class="grid" id="cn"></div>
 <div class="card dd" id="dd"></div>
 
+<div class="khm" id="khm"><div class="khb"><div style="font-size:46px">🌙</div><h2>تقبل الله، ختمت القرآن الكريم</h2><p class="sb" id="khs"></p>
+<div class="du" id="khd"></div></div>
+<div class="khf"><button class="g" id="khc">نسخ الدعاء</button><button id="khn">آمين، نبدأ ختمة جديدة من الفاتحة</button></div></div>
+
 <div class="ban" id="ban"><div id="bt">ضيف التطبيق على شاشة جهازك</div><button id="go">تثبيت التطبيق</button><button id="no">لاحقًا</button></div>
 <div class="toast" id="ts"></div>
 
+<script src="quran.js" defer></script>
 <script>
 const $=s=>document.querySelector(s);
 const P=[["fajr","الفجر","04:35"],["dhuhr","الظهر","11:50"],["asr","العصر","14:55"],["maghrib","المغرب","17:10"],["isha","العشاء","18:30"]];
@@ -171,9 +193,9 @@ const DD=[
 ["الحياء والستر","احفظ لسانك وعينك النهارده، واستر على من رأيت منه زلّة ولا تفضحه.","«إن الله حيي ستير يحب الحياء والستر» (رواه أبو داود وصححه الألباني)"]];
 const SHARE="الدال على الخير كفاعله، وأن تشارك فيصلك الأجر بإذن الله";
 
-let S={days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10};
+let S={days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{}};
 try{S=Object.assign(S,JSON.parse(localStorage.getItem("yawmi")||"{}"))}catch(e){}
-delete S.tpl;delete S.done;
+delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.qd=S.qd||{};S.qf=S.qf||{};
 (function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
 const save=()=>{try{localStorage.setItem("yawmi",JSON.stringify(S))}catch(e){}};
 let off=0,cur=0;
@@ -321,46 +343,71 @@ const AZ_S=[
 ];
 function azList(sc){
   const id=P[cur][0],fm=id==="fajr"||id==="maghrib";
+  if(sc==="q")return qList(key(dk(off)));
   if(sc==="m")return AZ_M.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
   if(sc==="e")return AZ_E.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
   if(sc==="s")return AZ_S.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
   return AZ_A.filter(a=>!a[3]||(a[3]==="fm"?fm:id==="fajr")).map(a=>({t:a[0],c:(a[4]&&fm)?3:a[1],n:a[2]||""}));
 }
 const azKey=sc=>sc==="a"?"a-"+P[cur][0]:sc;
-const azTitle={m:"أذكار الصباح",e:"أذكار المساء",s:"أذكار النوم",a:"أذكار ختام الصلاة"};
+const azTitle={m:"أذكار الصباح",e:"أذكار المساء",s:"أذكار النوم",a:"أذكار ختام الصلاة",q:"ورد القرآن"};
+// ورد القرآن: 10 صفحات كل يوم من مصحف 604 صفحة، والتقدم محفوظ ومش مربوط بالتاريخ (لو ما خلصتش النهارده يطلعلك نفس الصفحات بكرة)
+const QP=604,QD=10;
+const qStart=k=>S.qd[k]||((S.q.p%QP)+1);
+function qList(k){const s=qStart(k),n=Math.max(1,Math.min(QD,QP-s+1));return Array.from({length:n},(_,i)=>({t:"صفحة "+(s+i),c:1,n:"اضغط بعد ما تخلص قراءتها",q:s+i}))}
+const QA="٠١٢٣٤٥٦٧٨٩",qn=n=>String(n).replace(/\d/g,d=>QA[d]);
+let QC=null;
+function qPageHTML(pn){
+  if(!window.QT)return '<div class="nt">جاري تحميل نص المصحف… لو فضل كده افتح التطبيق أونلاين مرة واحدة.</div>';
+  if(!QC){QC=[0];for(let i=0;i<114;i++)QC.push(QC[i]+QT[i].length)}
+  const a=QG[pn-1],e=pn>=QP?6236:QG[pn]-1;let h="",si=0;
+  while(QC[si+1]<a)si++;
+  for(let id=a;id<=e;id++){while(id>QC[si+1])si++;const ay=id-QC[si];
+    if(ay===1){h+='<span class="sh">سورة '+QN[si]+'</span>';if(si!==0&&si!==8)h+='<span class="bs">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</span>'}
+    h+=QT[si][ay-1]+' <span class="an">﴿'+qn(ay)+'﴾</span> '}
+  return h}
+const KHATM=["اللَّهُمَّ ارْحَمْنِي بِالْقُرْآنِ، وَاجْعَلْهُ لِي إِمَامًا وَنُورًا وَهُدًى وَرَحْمَةً.","اللَّهُمَّ ذَكِّرْنِي مِنْهُ مَا نَسِيتُ، وَعَلِّمْنِي مِنْهُ مَا جَهِلْتُ، وَارْزُقْنِي تِلَاوَتَهُ آنَاءَ اللَّيْلِ وَأَطْرَافَ النَّهَارِ، وَاجْعَلْهُ لِي حُجَّةً يَا رَبَّ الْعَالَمِينَ.","اللَّهُمَّ اجْعَلِ الْقُرْآنَ رَبِيعَ قَلْبِي، وَنُورَ صَدْرِي، وَجَلَاءَ حُزْنِي، وَذَهَابَ هَمِّي.","اللَّهُمَّ أَصْلِحْ لِي دِينِيَ الَّذِي هُوَ عِصْمَةُ أَمْرِي، وَأَصْلِحْ لِي دُنْيَايَ الَّتِي فِيهَا مَعَاشِي، وَأَصْلِحْ لِي آخِرَتِي الَّتِي إِلَيْهَا مَعَادِي، وَاجْعَلِ الْحَيَاةَ زِيَادَةً لِي فِي كُلِّ خَيْرٍ، وَاجْعَلِ الْمَوْتَ رَاحَةً لِي مِنْ كُلِّ شَرٍّ.","اللَّهُمَّ اجْعَلْنَا مِمَّنْ يُحِلُّ حَلَالَهُ وَيُحَرِّمُ حَرَامَهُ، وَيَعْمَلُ بِمُحْكَمِهِ وَيُؤْمِنُ بِمُتَشَابِهِهِ، وَاجْعَلْهُ شَافِعًا لَنَا وَشَاهِدًا لَنَا لَا عَلَيْنَا.","رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ، وَتُبْ عَلَيْنَا إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ. وَصَلَّى اللَّهُ وَسَلَّمَ عَلَى نَبِيِّنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ أَجْمَعِينَ."];
+function showKhatm(){$("#khs").textContent="ختمة رقم "+S.q.k+" ✨ والختمة الجديدة بتبدأ تلقائي من الصفحة 1 إن شاء الله";
+  $("#khd").innerHTML=KHATM.map(t=>"<p style='margin:0 0 10px'>"+t+"</p>").join("");$("#khm").classList.add("show");document.body.style.overflow="hidden";try{navigator.vibrate&&navigator.vibrate([150,80,150])}catch(e){}}
+function hideKhatm(){S.q.pend=0;save();$("#khm").classList.remove("show");if(!azSc)document.body.style.overflow="";if(azSc==="q"){azRefresh()}renderAz()}
+function qCheck(k){const L=qList(k),c=((S.az[k]||{}).q)||[],n=L.length,all=L.every((a,i)=>(c[i]||0)>=1),f=S.qf[k];
+  if(all&&!f){S.q.p+=n;const kh=S.q.p>=QP;S.qf[k]={n:n,kh:kh?1:0};if(kh){S.q.p=0;S.q.k++;S.q.pend=1}save();if(kh)showKhatm()}
+  else if(!all&&f){if(f.kh){S.q.p=QP-f.n;S.q.k=Math.max(0,S.q.k-1);S.q.pend=0}else S.q.p=Math.max(0,S.q.p-f.n);delete S.qf[k];save()}}
 function azCounts(sc){const k=key(dk(off));return ((S.az[k]||{})[azKey(sc)])||[]}
 function azStat(sc){const L=azList(sc),c=azCounts(sc);let d=0;L.forEach((a,i)=>{if((c[i]||0)>=a.c)d++});return{d,n:L.length}}
 function renderAz(){
   const C=2*Math.PI*46;
-  $("#az").innerHTML=["m","e","s","a"].map(sc=>{const st=azStat(sc),pc=st.n?st.d/st.n:0,all=st.n&&st.d===st.n;
-    const nm=sc==="a"?"ختام<br>"+P[cur][1]:azTitle[sc].replace("أذكار ","أذكار<br>");
-    return `<button class="azc${all?" all":""}" data-az="${sc}"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="var(--ln)" stroke-width="5"/><circle cx="50" cy="50" r="46" fill="none" stroke="var(--pri)" stroke-width="5" stroke-linecap="round" stroke-dasharray="${(pc*C).toFixed(1)} ${C.toFixed(1)}"/></svg><span class="in"><b>${all?"✓ ":""}${nm}</b><small>${st.d} / ${st.n}</small></span></button>`}).join("");
+  $("#az").innerHTML=["q","m","e","s","a"].map(sc=>{const st=azStat(sc),pc=st.n?st.d/st.n:0,all=st.n&&st.d===st.n;
+    const nm=sc==="a"?"ختام<br>"+P[cur][1]:sc==="q"?"ورد<br>القرآن":azTitle[sc].replace("أذكار ","أذكار<br>");
+    return `<button class="azc${all?" all":""}${sc==="q"?" qr":""}" data-az="${sc}"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="var(--ln)" stroke-width="5"/><circle cx="50" cy="50" r="46" fill="none" stroke="var(--pri)" stroke-width="5" stroke-linecap="round" stroke-dasharray="${(pc*C).toFixed(1)} ${C.toFixed(1)}"/></svg><span class="in"><b>${all?"✓ ":""}${nm}</b><small>${st.d} / ${st.n}</small></span></button>`}).join("");
 }
 let azSc=null;
 function azItemHTML(a,i,v){const done=v>=a.c;
+  if(a.q)return `<div class="it qi${done?" ok":""}" data-i="${i}"><div class="bd"><div class="qh">${a.t}</div><div class="qt">${qPageHTML(a.q)}</div><button class="qb">${done?"✓ تمت قراءة الصفحة":"✓ خلصت الصفحة "+qn(a.q)}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
   return `<div class="it${done?" ok":""}" data-i="${i}"><div class="bd"><div class="tx">${a.t}</div>${a.n?`<div class="nt">${a.n}</div>`:""}${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div><div class="ct">${done?"✓":(a.c-v)}<small>${done?"تم":"متبقي"}</small></div></div>`}
-function azBar(){const st=azStat(azSc);$("#azbar").style.width=(st.n?st.d/st.n*100:0)+"%";$("#azp").textContent=st.d+" من "+st.n+" ذكر"+(st.d===st.n?" ✓ تقبل الله":"")}
+function azBar(){const st=azStat(azSc);$("#azbar").style.width=(st.n?st.d/st.n*100:0)+"%";$("#azp").textContent=azSc==="q"?st.d+" من "+st.n+" صفحة"+(st.d===st.n?" ✓ تقبل الله":"")+" · تقدم الختمة "+S.q.p+"/"+QP+(S.q.k?" · ختمات: "+S.q.k:""):st.d+" من "+st.n+" ذكر"+(st.d===st.n?" ✓ تقبل الله":"")}
 function azOpen(sc){azSc=sc;const L=azList(sc),c=azCounts(sc);
-  $("#azt").textContent=sc==="a"?"أذكار ختام صلاة "+P[cur][1]:azTitle[sc];
+  $("#azt").textContent=sc==="a"?"أذكار ختام صلاة "+P[cur][1]:sc==="q"?"ورد القرآن: صفحة "+L[0].q+" إلى "+L[L.length-1].q:azTitle[sc];
   $("#azl").innerHTML=L.map((a,i)=>azItemHTML(a,i,c[i]||0)).join("");$("#azl").scrollTop=0;azBar();
   $("#azm").classList.add("show");document.body.style.overflow="hidden";
   try{history.pushState({az:1},"")}catch(e){}}
 function azRefresh(){const L=azList(azSc),c=azCounts(azSc);$("#azl").innerHTML=L.map((a,i)=>azItemHTML(a,i,c[i]||0)).join("");azBar()}
 function azClose(){if(!azSc)return;azSc=null;$("#azm").classList.remove("show");document.body.style.overflow="";renderAz();}
 window.addEventListener("popstate",()=>azClose());
-function azSet(i,fn){const L=azList(azSc),k=key(dk(off)),kk=azKey(azSc);
+function azSet(i,fn){const k=key(dk(off));if(azSc==="q"&&!S.qd[k])S.qd[k]=qStart(k);const L=azList(azSc),kk=azKey(azSc);
   const box=(S.az[k]=S.az[k]||{});const arr=(box[kk]=box[kk]||[]);
   const before=arr[i]||0;arr[i]=Math.max(0,Math.min(L[i].c,fn(before,L[i].c)));save();
   const el=$("#azl").children[i];const tmp=document.createElement("div");tmp.innerHTML=azItemHTML(L[i],i,arr[i]);el.className=tmp.firstChild.className;el.innerHTML=tmp.firstChild.innerHTML;azBar();
+  if(azSc==="q"){qCheck(k);azBar()}
   if(before<L[i].c&&arr[i]>=L[i].c){try{navigator.vibrate&&navigator.vibrate(80)}catch(e){}
-    const nx=azList(azSc).findIndex((a,j)=>j>i&&(arr[j]||0)<a.c);const ne=nx>=0&&$("#azl").children[nx];if(ne)setTimeout(()=>{try{ne.scrollIntoView({behavior:"smooth",block:"center"})}catch(e){}},250)}
+    const nx=azList(azSc).findIndex((a,j)=>j>i&&(arr[j]||0)<a.c);const ne=nx>=0&&$("#azl").children[nx];if(ne)setTimeout(()=>{try{ne.scrollIntoView({behavior:"smooth",block:azSc==="q"?"start":"center"})}catch(e){}},250)}
   else if(arr[i]>before){try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}}}
 document.addEventListener("click",e=>{
   const c=e.target.closest(".azc");if(c){azOpen(c.dataset.az);return}
   if(e.target.closest("#azx")){if(history.state&&history.state.az){history.back()}else azClose();return}
-  if(e.target.closest("#azr")){if(azSc&&confirm("تصفير كل أذكار القايمة دي؟")){const k=key(dk(off));if(S.az[k])delete S.az[k][azKey(azSc)];save();azRefresh()}return}
+  if(e.target.closest("#azr")){if(azSc&&confirm("تصفير كل أذكار القايمة دي؟")){const k=key(dk(off));if(S.az[k])delete S.az[k][azKey(azSc)];save();if(azSc==="q")qCheck(k);azRefresh()}return}
   const r=e.target.closest(".rs");if(r){e.stopPropagation();azSet(+r.dataset.ri,()=>0);return}
-  const it=e.target.closest(".it");if(it&&azSc!==null)azSet(+it.dataset.i,(v)=>v+1);
+  const it=e.target.closest(".it");if(it&&azSc!==null){if(azSc==="q"&&!e.target.closest(".qb"))return;azSet(+it.dataset.i,(v)=>v+1)}
 });
 
 let ac;
@@ -432,7 +479,9 @@ const mt=$("#mot");mt.value=S.mot||"";
 const grow=()=>{mt.style.height="auto";mt.style.height=mt.scrollHeight+"px"};
 mt.addEventListener("input",()=>{S.mot=mt.value;save();grow()});window.addEventListener("load",grow);window.addEventListener("resize",grow);
 try{if(navigator.serviceWorker)navigator.serviceWorker.ready.then(()=>{if(!localStorage.getItem("offok")){localStorage.setItem("offok","1");toast("التطبيق جاهز للعمل بدون إنترنت ✅")}})}catch(e){}
-cur=curIdx();render();grow();
+$("#khn").onclick=hideKhatm;
+$("#khc").onclick=()=>{const t=KHATM.join("\n");if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>toast("تم نسخ الدعاء"),()=>{})}};
+cur=curIdx();render();grow();if(S.q.pend)showKhatm();
 </script>
 </body>
 </html>

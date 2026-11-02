@@ -113,10 +113,11 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .tk{transition:transform .65s ease-out,opacity .65s ease-out,filter .65s ease-out,background .2s,color .2s}
 .tk.poof{background:var(--pri);border-color:var(--pri);color:#fff;opacity:0;filter:blur(8px);transform:translateY(-34px) scale(1.25)}
 .tkx{border:0;background:none;color:inherit;opacity:.6;font-size:13px;cursor:pointer;padding:0 2px}
+.mid .rs,#tks .rs{border:0;background:none;color:var(--mut);font:inherit;font-size:12.5px;margin-top:4px;cursor:pointer}
 </style>
 </head>
 <body>
-<div class="top"><h1 id="dt">…<small id="hj"></small></h1></div>
+<div class="top"><button class="nav" id="nx" aria-label="اليوم التالي">→</button><h1 id="dt">…<small id="hj"></small></h1><button class="nav" id="pv" aria-label="اليوم السابق">←</button></div>
 <div class="mot"><textarea id="mot" rows="2" placeholder="اكتب هنا جملتك التحفيزية…" aria-label="جملتي التحفيزية"></textarea></div>
 <div class="prs" id="prs"></div>
 <div class="ctl"><button class="sm" id="snd"></button><button class="sm" id="rm"></button></div>
@@ -219,13 +220,13 @@ function to24(id,h){if(h>=13||h===0)return h;if(id==="fajr")return h;if(id==="dh
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function render(){
-  const d=dk(0),k=key(d),n=dayN(d.getTime());
+  const d=dk(off),k=key(d),n=dayN(d.getTime());
   if(!azSc)cur=curIdx();
   $("#dt").firstChild.textContent=d.toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
   let h="";try{h=d.toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"})}catch(e){}
   $("#hj").textContent=h;
   const pd=S.pr[k]||{},tm=times(d);
-  $("#prs").innerHTML=P.map((p,i)=>`<div class="pr${pd[p[0]]?" on":""}${i==cur?" now":""}" data-p="${p[0]}" role="button"><b>${pd[p[0]]?"✓ ":""}${p[1]}</b><span class="ptm" data-pt="${p[0]}">${fmt12(tm[p[0]])}</span></div>`).join("");
+  $("#prs").innerHTML=P.map((p,i)=>`<div class="pr${pd[p[0]]?" on":""}${i==cur&&off==0?" now":""}" data-p="${p[0]}" role="button"><b>${pd[p[0]]?"✓ ":""}${p[1]}</b><span class="ptm" data-pt="${p[0]}">${fmt12(tm[p[0]])}</span></div>`).join("");
   $("#snd").textContent="🔔 الأذان: "+(S.snd?"تشغيل":"إيقاف");
   $("#rm").textContent="⏰ تذكير: "+(S.rem?S.rem+"د":"إيقاف");
   const tks=S.tk[k]||[],dn=tks.filter(t=>t.x).length;
@@ -256,13 +257,14 @@ document.addEventListener("click",e=>{
   else if(t.dataset.dd){S.dd[k]=S.dd[k]?0:1;save();render()}
   else if(t.dataset.s){const s=t.dataset.s;if(navigator.share)navigator.share({text:s}).catch(()=>{});else if(navigator.clipboard){navigator.clipboard.writeText(s);toast("تم النسخ للمشاركة")}}
 });
-function editTime(id){const d=dk(0),v=prompt("موعد الأذان بالساعة العادية (مثال 2:55):",fmt12(times(d)[id]));
+function editTime(id){const d=dk(off),v=prompt("موعد الأذان بالساعة العادية (مثال 2:55):",fmt12(times(d)[id]));
   if(v===null)return;const m=toLat(v.trim()).match(/^(\d{1,2}):(\d{2})$/);
   if(m&&+m[1]<=23&&+m[2]<=59){S.ov[iso(d)+"|"+id]=String(to24(id,+m[1])).padStart(2,"0")+":"+m[2];save();render()}else toast("اكتب الموعد بالشكل ده: 2:55")}
-$("#add").onclick=()=>{const t=prompt("اكتب المهمة");if(t&&t.trim()){const k=key(dk(0));(S.tk[k]=S.tk[k]||[]).push({t:t.trim(),x:0});save();render()}};
+$("#nx").onclick=()=>{off++;render()};$("#pv").onclick=()=>{off--;render()};
+$("#add").onclick=()=>{const t=prompt("اكتب المهمة");if(t&&t.trim()){const k=key(dk(off));(S.tk[k]=S.tk[k]||[]).push({t:t.trim(),x:0});save();render()}};
 $("#snd").onclick=()=>{S.snd=!S.snd;save();render();if(S.snd)beep()};
 $("#rm").onclick=()=>{const v=prompt("التذكير قبل الأذان بكام دقيقة؟ (0 للإيقاف)",S.rem);if(v!==null&&!isNaN(+v)){S.rem=+v;save();render();if(S.rem)remindSound()}};
-document.addEventListener("click",e=>{const k=key(dk(0));
+document.addEventListener("click",e=>{const k=key(dk(off));
   const pt=e.target.closest(".ptm");if(pt){e.stopPropagation();editTime(pt.dataset.pt);return}
   const pr=e.target.closest(".pr");if(pr){const o=S.pr[k]=S.pr[k]||{};o[pr.dataset.p]=o[pr.dataset.p]?0:1;save();render();if(o[pr.dataset.p]&&navigator.vibrate)navigator.vibrate(40);return}
   const x=e.target.closest(".tkx");if(x){e.stopPropagation();if(confirm("حذف المهمة؟")){S.tk[k].splice(+x.dataset.x,1);save();render()}return}

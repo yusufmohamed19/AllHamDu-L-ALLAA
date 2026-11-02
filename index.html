@@ -99,29 +99,26 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .it:active{transform:scale(.99)}
 .it.ok{opacity:.55;border-color:var(--pri)}.it.ok .ct{background:var(--pri);color:#fff}
 .it .rs{border:0;background:none;color:var(--mut);font-size:12px;cursor:pointer;padding:0}
+.prs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0 6px}
+.pr{border:1.5px solid var(--ln);background:var(--card);border-radius:14px;padding:8px 2px;text-align:center;cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.pr b{display:block;font-size:14px}.pr .ptm{display:inline-block;font-size:12px;color:var(--mut);padding:2px 6px}
+.pr.now{border-color:var(--pri)}.pr.on{background:var(--pri);border-color:var(--pri);color:#fff}.pr.on .ptm{color:#e6f4ec}
+.ctl{display:flex;justify-content:center;gap:8px;margin:4px 0 10px}
+.ctl .sm{border:1px solid var(--ln);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;font-size:12px;padding:3px 10px;cursor:pointer}
+.mid{display:flex;flex-direction:column;align-items:center;margin:14px 0;min-height:120px}
+.addb{width:64px;height:64px;border-radius:50%;border:3px solid var(--acc);background:var(--card);color:var(--acc);font-size:38px;line-height:1;padding:0;cursor:pointer}
+.tks{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px;width:100%}
+.tk{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--acc);border-radius:22px;padding:8px 14px;font-size:15px;cursor:pointer;-webkit-user-select:none;user-select:none}
+.tk.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.tkx{border:0;background:none;color:inherit;opacity:.6;font-size:13px;cursor:pointer;padding:0 2px}
 </style>
 </head>
 <body>
-<div class="top">
-  <button class="nav" id="nx" aria-label="اليوم التالي">→</button>
-  <h1 id="dt">…<small id="hj"></small></h1>
-  <button class="nav" id="pv" aria-label="اليوم السابق">←</button>
-</div>
+<div class="top"><h1 id="dt">…<small id="hj"></small></h1></div>
 <div class="mot"><textarea id="mot" rows="2" placeholder="اكتب هنا جملتك التحفيزية…" aria-label="جملتي التحفيزية"></textarea></div>
-<div class="tabs" id="tabs"></div>
-
-<div class="stagew"><div class="stage" id="stage">
-  <div class="core">
-    <svg viewBox="0 0 100 100"><circle id="ring" cx="50" cy="50" r="48" fill="none" stroke="var(--pri)" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 301.6"/></svg>
-    <h2 id="pn">الفجر</h2>
-    <div class="tm" id="pt" title="اضغط لتعديل الموعد">--:--</div>
-    <div class="row"><button class="sm" id="snd">🔔 الأذان: تشغيل</button></div>
-    <div class="row"><button class="sm" id="rm">⏰ تذكير: 10د</button></div>
-  </div>
-  <button class="plus" id="add" aria-label="إضافة مهمة">+</button>
-</div></div>
-<div class="lock" id="lk"></div>
-<p class="hint">+ تضيف مهمة جديدة لدايرة الصلاة، واضغط على أي دايرة صغيرة لما تخلصها (كل يوم مستقل بمهامه) فتمتلئ دايرة الصلاة، ولو خلصتهم كلهم تتقفل.</p>
+<div class="prs" id="prs"></div>
+<div class="ctl"><button class="sm" id="snd"></button><button class="sm" id="rm"></button></div>
+<div class="mid"><button class="addb" id="add" aria-label="إضافة مهمة">+</button><div class="tks" id="tks"></div></div>
 
 <div class="az" id="az"></div>
 <div class="azm" id="azm"><div class="azh"><button id="azx">✕ إغلاق</button><div class="t"><b id="azt"></b><small id="azp"></small></div><button id="azr">إعادة</button></div><div class="azb"><i id="azbar"></i></div><div id="azl"></div></div>
@@ -191,18 +188,25 @@ const DD=[
 ["إتقان العمل","أتقن كل ما تعمله النهارده في شغلك، وراجع جودته قبل ما تسلّمه.","«إن الله يحب إذا عمل أحدكم عملًا أن يتقنه» (رواه البيهقي وحسنه الألباني)"],
 ["التحاب في الله","اتصل بصديق أو قريب لوجه الله وقل له: «أحبك في الله».","حديث قدسي: «وجبت محبتي للمتحابين فيّ» (رواه مالك وأحمد وصححه الألباني)"],
 ["الحياء والستر","احفظ لسانك وعينك النهارده، واستر على من رأيت منه زلّة ولا تفضحه.","«إن الله حيي ستير يحب الحياء والستر» (رواه أبو داود وصححه الألباني)"]];
+
+H.push(["«الطُّهور شطر الإيمان»","رواه مسلم","النظافة والوضوء من أعظم أسباب الأجر، ونصف الإيمان."],["«اتق الله حيثما كنت، وأتبع السيئة الحسنة تمحها، وخالق الناس بخلق حسن»","رواه الترمذي","التقوى في السر والعلن، والحسنة بعد الذنب تمحوه، وحسن الخلق مع الناس."],["«من كان يؤمن بالله واليوم الآخر فليقل خيرًا أو ليصمت»","متفق عليه","حفظ اللسان من علامات الإيمان."],["«المسلم من سلم المسلمون من لسانه ويده»","متفق عليه","كمال الإسلام في أن يأمنك الناس."],["«من حسن إسلام المرء تركه ما لا يعنيه»","رواه الترمذي","اشتغل بما ينفعك واترك الفضول."],["«لا تغضب»","رواه البخاري","وصية النبي ﷺ لمن طلب نصيحة موجزة، فاملك نفسك عند الغضب."],["«الدين النصيحة»","رواه مسلم","النصح لله ولكتابه ولرسوله ولأئمة المسلمين وعامتهم."],["«خيركم من تعلم القرآن وعلمه»","رواه البخاري","أفضل الناس من تعلم القرآن وعلّمه غيره."],["«ليس الشديد بالصرعة، إنما الشديد الذي يملك نفسه عند الغضب»","متفق عليه","القوة الحقيقية في ضبط النفس."],["«من لا يرحم لا يرحم»","متفق عليه","ارحم الناس والحيوان يرحمك الله."],["«من صلى البردين دخل الجنة»","متفق عليه","المحافظة على الفجر والعصر سبب لدخول الجنة."],["«من قال سبحان الله وبحمده في يوم مائة مرة حطت خطاياه وإن كانت مثل زبد البحر»","متفق عليه","ذكر يسير وأجر عظيم."],["«كلمتان خفيفتان على اللسان، ثقيلتان في الميزان، حبيبتان إلى الرحمن: سبحان الله وبحمده، سبحان الله العظيم»","متفق عليه","خفة الذكر على اللسان وثقله في الميزان."],["«من صلى عليّ صلاة صلى الله عليه بها عشرًا»","رواه مسلم","كل صلاة على النبي ﷺ بعشر صلوات من الله عليك."]);
+DD.push(["الابتسامة","ابتسم في وجه كل من تقابله النهارده.","«تبسمك في وجه أخيك لك صدقة» (رواه الترمذي)"],["الصدقة","تصدق النهارده بأي مبلغ ولو صغير.","«اتقوا النار ولو بشق تمرة» (متفق عليه)"],["السواك","استخدم السواك أو نظف أسنانك قبل كل صلاة.","«لولا أن أشق على أمتي لأمرتهم بالسواك عند كل صلاة» (متفق عليه)"],["إماطة الأذى","شيل أي حاجة تؤذي الناس من الطريق.","«وتميط الأذى عن الطريق صدقة» (متفق عليه)"],["سقي الماء","اسق إنسانًا أو حيوانًا عطشان.","«في كل كبد رطبة أجر» (متفق عليه)"],["عيادة المريض","زر مريضًا أو اتصل به واطمئن عليه.","«إذا عاد المسلم أخاه لم يزل في خرفة الجنة» (رواه مسلم)"],["الدعاء بظهر الغيب","ادع لأخ أو صديق في غيابه بخير.","«دعوة المرء المسلم لأخيه بظهر الغيب مستجابة» (رواه مسلم)"],["صلة الرحم","اتصل بقريب انقطعت عنه أو زره.","«من أحب أن يبسط له في رزقه فليصل رحمه» (متفق عليه)"],["حفظ آية","احفظ آية جديدة أو راجع آيات حفظتها.","«خيركم من تعلم القرآن وعلمه» (رواه البخاري)"],["إفشاء السلام","ابدأ بالسلام على كل من تقابله.","«أفشوا السلام بينكم» (رواه مسلم)"],["صيام النافلة","صم يومًا نافلة (الاثنين أو الخميس أو ثلاثة أيام من الشهر).","«من صام يومًا في سبيل الله باعد الله وجهه عن النار سبعين خريفًا» (متفق عليه)"],["الاستغفار","استغفر الله 100 مرة النهارده.","«إني لأستغفر الله وأتوب إليه في اليوم أكثر من سبعين مرة» (رواه البخاري)"],["سنة الفجر","صلّ ركعتي سنة الفجر بتركيز.","«ركعتا الفجر خير من الدنيا وما فيها» (رواه مسلم)"],["العلم النافع","انشر علمًا نافعًا أو ساهم في عمل خير مستمر.","«إذا مات ابن آدم انقطع عمله إلا من ثلاث: صدقة جارية، أو علم ينتفع به، أو ولد صالح يدعو له» (رواه مسلم)"],["حسن الخلق","عامل كل من حولك بأحسن خلق النهارده.","«إن من أحبكم إليّ وأقربكم مني مجلسًا يوم القيامة أحاسنكم أخلاقًا» (رواه الترمذي)"]);
+const DH=H;
+// آية لكل يوم من 360: (سورة، أول آية، العدد) والنص بيتجاب من مصحف quran.js
+const DV=[];[[1,2,6],[2,152,5],[2,255,3],[2,284,3],[3,133,8],[3,159,3],[3,190,6],[4,36,3],[4,58,3],[6,162,2],[7,199,3],[8,2,4],[9,111,3],[10,57,4],[11,114,3],[13,28,6],[14,7,3],[15,97,3],[16,90,5],[17,23,8],[18,107,4],[20,25,8],[21,87,4],[23,1,11],[24,35,5],[25,63,15],[26,78,10],[28,77,3],[29,45,2],[30,21,3],[31,12,8],[33,41,10],[33,70,3],[35,29,4],[39,53,10],[41,30,10],[49,10,9],[51,56,3],[59,18,7],[93,1,11],[94,1,8],[103,1,3],[112,1,4],[36,1,83],[67,1,30],[55,1,78],[56,1,96],[57,1,29]].forEach(a=>{for(let i=0;i<a[2];i++)DV.push([a[0],a[1]+i])});DV.length=Math.min(DV.length,360);
 const SHARE="الدال على الخير كفاعله، وأن تشارك فيصلك الأجر بإذن الله";
 
-let S={days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{}};
+let S={pr:{},tk:{},days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{}};
 try{S=Object.assign(S,JSON.parse(localStorage.getItem("yawmi")||"{}"))}catch(e){}
-delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.qd=S.qd||{};S.qf=S.qf||{};
-(function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
+delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.pr=S.pr||{};S.tk=S.tk||{};S.qd=S.qd||{};S.qf=S.qf||{};
+(function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd","pr","tk"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
 const save=()=>{try{localStorage.setItem("yawmi",JSON.stringify(S))}catch(e){}};
 let off=0,cur=0;
 const dk=o=>{const d=new Date();d.setDate(d.getDate()+o);return d};
 const key=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 const dayN=t=>{const d=new Date(t);return Math.floor((t-d.getTimezoneOffset()*6e4)/864e5)};
 const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+(function(){const k=key(new Date()),o=S.days[k];if(o&&!S.tk[k]){const a=[];Object.keys(o).forEach(id=>(o[id]||[]).forEach(t=>a.push({t:t.t,x:t.x?1:0})));if(a.length)S.tk[k]=a}})();
 (function(){const lim=iso(dk(-7));Object.keys(S.ov||{}).forEach(k=>{if(k.split("|")[0]<lim)delete S.ov[k]})})();
 function toast(t){const e=$("#ts");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",3500)}
 // المواعيد تتخزن 24 ساعة جوه التطبيق، وبتتعرض 12 ساعة (الظهر 2 مش 14)
@@ -211,33 +215,23 @@ function fmt12(t){const [h,m]=t.split(":").map(Number);return (h%12||12)+":"+Str
 const toLat=x=>x.replace(/[٠-٩]/g,c=>"٠١٢٣٤٥٦٧٨٩".indexOf(c)).replace(/[٫.]/g,":");
 function to24(id,h){if(h>=13||h===0)return h;if(id==="fajr")return h;if(id==="dhuhr")return h<11?h+12:h;return h<12?h+12:h}
 
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function render(){
-  const d=dk(off),k=key(d),n=dayN(d.getTime());
+  const d=dk(0),k=key(d),n=dayN(d.getTime());
+  if(!azSc)cur=curIdx();
   $("#dt").firstChild.textContent=d.toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
   let h="";try{h=d.toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"})}catch(e){}
   $("#hj").textContent=h;
-  const dayT=id=>((S.days[k]||{})[id])||[];
-  const full=i=>{const t=dayT(P[i][0]);return t.length>0&&t.every(a=>a.x)};
-  $("#tabs").innerHTML=P.map((p,i)=>`<button class="tab ${i==cur?"on":""}" data-i="${i}">${full(i)?"🔒 ":""}${p[1]}</button>`).join("");
-  const p=P[cur],tp=dayT(p[0]);
-  $("#pn").textContent=p[1];$("#pt").textContent=fmt12(times(d)[p[0]]);
+  const pd=S.pr[k]||{},tm=times(d);
+  $("#prs").innerHTML=P.map((p,i)=>`<div class="pr${pd[p[0]]?" on":""}${i==cur?" now":""}" data-p="${p[0]}" role="button"><b>${pd[p[0]]?"✓ ":""}${p[1]}</b><span class="ptm" data-pt="${p[0]}">${fmt12(tm[p[0]])}</span></div>`).join("");
   $("#snd").textContent="🔔 الأذان: "+(S.snd?"تشغيل":"إيقاف");
   $("#rm").textContent="⏰ تذكير: "+(S.rem?S.rem+"د":"إيقاف");
-  const dn_=tp.filter(a=>a.x).length,pc=tp.length?dn_/tp.length*100:0;
-  $("#ring").setAttribute("stroke-dasharray",(pc*3.016)+" 301.6");
-  $("#lk").textContent=full(cur)?"🔒 تمت دايرة "+p[1]+" بالكامل، تقبل الله":(tp.length?dn_+" من "+tp.length+" مهمة":"اليوم ده فاضي، اضغط + وضيف مهامك");
-  $("#stage").querySelectorAll(".dot").forEach(e=>e.remove());
-  tp.forEach((t,j)=>{
-    const a=(Math.PI*2*j/Math.max(tp.length,1))-Math.PI/2,b=document.createElement("button");
-    b.className="dot"+(t.x?" done":"");b.textContent=t.t.length>12?t.t.slice(0,11)+"…":t.t;b.title=t.t;
-    b.style.left=50+41*Math.cos(a)+"%";b.style.top=50+41*Math.sin(a)+"%";
-    b.onclick=()=>{t.x=t.x?0:1;save();render()};
-    b.oncontextmenu=e=>{e.preventDefault();if(confirm("حذف المهمة؟")){tp.splice(j,1);save();render()}};
-    $("#stage").appendChild(b);
-  });
-  const v=V[n%7],hd=H[n%7],l=L[n%7],f=F[n%7];
+  const tks=S.tk[k]||[];
+  $("#tks").innerHTML=tks.length?tks.map((t,j)=>`<div class="tk${t.x?" on":""}" data-j="${j}" role="button"><span>${t.x?"✓ ":""}${esc(t.t)}</span><button class="tkx" data-x="${j}" aria-label="حذف">✕</button></div>`).join(""):'<div class="hint" style="width:100%">اضغط + وضيف مهامك، واضغط على المهمة لما تخلصها</div>';
+  const l=L[n%7],f=F[n%7];
   const sh=t=>`<button class="share" data-s="${t}">شارك واكسب الأجر</button>`;
-  $("#vs").innerHTML=`<h3>آية اليوم</h3><p>${v[0]}</p><p class="src">${v[1]}</p><p>${v[2]}</p>${sh(v[0])}`;
+  const dv=window.QT&&DV[n%DV.length],v0=V[n%7],hd=DH[n%DH.length];
+  $("#vs").innerHTML=dv?`<h3>آية اليوم</h3><p>﴿${QT[dv[0]-1][dv[1]-1]}﴾</p><p class="src">${QN[dv[0]-1]}: ${dv[1]}</p>${sh("﴿"+QT[dv[0]-1][dv[1]-1]+"﴾ ("+QN[dv[0]-1]+": "+dv[1]+")")}`:`<h3>آية اليوم</h3><p>${v0[0]}</p><p class="src">${v0[1]}</p><p>${v0[2]}</p>${sh(v0[0])}`;
   $("#hd").innerHTML=`<h3>حديث اليوم</h3><p>${hd[0]}</p><p class="src">${hd[1]}</p><p>${hd[2]}</p>${sh(hd[0])}`;
   $("#lv").innerHTML=`<h3>حاجة ربنا يحبها: ${l[0]}</h3><p>${l[1]}</p><p class="src">${SHARE}</p>${sh("ما يحبه الله: "+l[0]+" — "+l[1])}`;
   $("#fb").innerHTML=`<h3>حاجة ربنا حرّمها منتشرة بينا: ${f[0]}</h3><p>${f[1]}</p><p class="src">لو واحد بس عرف إن ده حرام وتركه، لك مثل أجره.</p>${sh("من المحرمات: "+f[0]+" — "+f[1])}`;
@@ -258,13 +252,17 @@ document.addEventListener("click",e=>{
   else if(t.dataset.dd){S.dd[k]=S.dd[k]?0:1;save();render()}
   else if(t.dataset.s){const s=t.dataset.s;if(navigator.share)navigator.share({text:s}).catch(()=>{});else if(navigator.clipboard){navigator.clipboard.writeText(s);toast("تم النسخ للمشاركة")}}
 });
-$("#nx").onclick=()=>{off++;render()};$("#pv").onclick=()=>{off--;render()};
-$("#add").onclick=()=>{const t=prompt("اكتب المهمة (مثال: سنة الفجر، أذكار الصباح)");if(t&&t.trim()){const id=P[cur][0],k=key(dk(off));((S.days[k]=S.days[k]||{})[id]=S.days[k][id]||[]).push({t:t.trim(),x:0});save();render()}};
-$("#pt").onclick=()=>{const id=P[cur][0],d=dk(off),v=prompt("موعد الأذان بالساعة العادية (مثال 2:55):",fmt12(times(d)[id]));
+function editTime(id){const d=dk(0),v=prompt("موعد الأذان بالساعة العادية (مثال 2:55):",fmt12(times(d)[id]));
   if(v===null)return;const m=toLat(v.trim()).match(/^(\d{1,2}):(\d{2})$/);
-  if(m&&+m[1]<=23&&+m[2]<=59){S.ov[iso(d)+"|"+id]=String(to24(id,+m[1])).padStart(2,"0")+":"+m[2];save();render()}else toast("اكتب الموعد بالشكل ده: 2:55")};
+  if(m&&+m[1]<=23&&+m[2]<=59){S.ov[iso(d)+"|"+id]=String(to24(id,+m[1])).padStart(2,"0")+":"+m[2];save();render()}else toast("اكتب الموعد بالشكل ده: 2:55")}
+$("#add").onclick=()=>{const t=prompt("اكتب المهمة");if(t&&t.trim()){const k=key(dk(0));(S.tk[k]=S.tk[k]||[]).push({t:t.trim(),x:0});save();render()}};
 $("#snd").onclick=()=>{S.snd=!S.snd;save();render();if(S.snd)beep()};
 $("#rm").onclick=()=>{const v=prompt("التذكير قبل الأذان بكام دقيقة؟ (0 للإيقاف)",S.rem);if(v!==null&&!isNaN(+v)){S.rem=+v;save();render();if(S.rem)remindSound()}};
+document.addEventListener("click",e=>{const k=key(dk(0));
+  const pt=e.target.closest(".ptm");if(pt){e.stopPropagation();editTime(pt.dataset.pt);return}
+  const pr=e.target.closest(".pr");if(pr){const o=S.pr[k]=S.pr[k]||{};o[pr.dataset.p]=o[pr.dataset.p]?0:1;save();render();if(o[pr.dataset.p]&&navigator.vibrate)navigator.vibrate(40);return}
+  const x=e.target.closest(".tkx");if(x){e.stopPropagation();if(confirm("حذف المهمة؟")){S.tk[k].splice(+x.dataset.x,1);save();render()}return}
+  const tk=e.target.closest(".tk");if(tk){const t=S.tk[k][+tk.dataset.j];t.x=t.x?0:1;save();render();if(t.x&&navigator.vibrate)navigator.vibrate(40)}});
 
 
 // ===== الأذكار: [النص, التكرار, ملاحظة, متى(fm=فجر ومغرب, f=فجر فقط), 3 مرات في الفجر والمغرب] =====
@@ -481,7 +479,7 @@ mt.addEventListener("input",()=>{S.mot=mt.value;save();grow()});window.addEventL
 try{if(navigator.serviceWorker)navigator.serviceWorker.ready.then(()=>{if(!localStorage.getItem("offok")){localStorage.setItem("offok","1");toast("التطبيق جاهز للعمل بدون إنترنت ✅")}})}catch(e){}
 $("#khn").onclick=hideKhatm;
 $("#khc").onclick=()=>{const t=KHATM.join("\n");if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>toast("تم نسخ الدعاء"),()=>{})}};
-cur=curIdx();render();grow();if(S.q.pend)showKhatm();
+cur=curIdx();render();grow();document.addEventListener("DOMContentLoaded",()=>{if(!azSc)render()});if(S.q.pend)showKhatm();
 </script>
 </body>
 </html>

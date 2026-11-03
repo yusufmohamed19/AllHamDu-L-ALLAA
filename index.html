@@ -118,6 +118,13 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .hh{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .ck{width:30px;height:30px;border-radius:50%;border:2px solid var(--pri);background:var(--card);color:#fff;font-size:17px;line-height:1;padding:0;cursor:pointer;flex:none}
 .ck.on{background:var(--pri)}
+.card.done{background:var(--pri);border-color:var(--pri);color:#fff}
+.card.done h3,.card.done p,.card.done .src,.card.done div,.card.done span{color:#fff}
+.card.done .ck{background:#fff;color:var(--pri);border-color:#fff}
+.card.done .share{color:#fff;border-color:rgba(255,255,255,.7)}
+.card.done .reset{color:#e6f4ec}
+.card.done button.c,.card.done .cnt button.c,.card.done .c.ok{background:#fff;color:var(--pri);border-color:#fff}
+.card{transition:background .3s,color .3s}
 </style>
 </head>
 <body>
@@ -263,9 +270,10 @@ function render(){
   $("#fb").innerHTML=`${hh("حاجة ربنا حرّمها منتشرة بينا: "+f[0],"fb")}<p>${f[1]}</p><p class="src">لو واحد بس عرف إن ده حرام وتركه، لك مثل أجره.</p>${sh("من المحرمات: "+f[0]+" — "+f[1])}`;
   const c=S.cnt[k]=S.cnt[k]||{};
   const names={dk1:D[n%D.length],dk2:D[(n+13)%D.length],sub:"سبحان الله وبحمده",sal:"اللهم صل وسلم على نبينا محمد",ist:"أستغفر الله"};
-  $("#cn").innerHTML=C.map(([id,t])=>{const v=c[id]||0;return `<div class="card cnt"><div>${id=="dk1"||id=="dk2"?hh(t,id):`<h3>${t}</h3>`}<div style="font-size:14px">${names[id]}</div><button class="reset" data-r="${id}">تصفير</button></div><button class="c ${v>=100?"ok":""}" data-c="${id}">${v}<span style="font-size:11px;font-weight:400">/100</span></button></div>`}).join("");
+  $("#cn").innerHTML=C.map(([id,t])=>{const v=c[id]||0;return `<div class="card cnt${v>=100||cks[id]?" done":""}"><div>${id=="dk1"||id=="dk2"?hh(t,id):`<h3>${t}</h3>`}<div style="font-size:14px">${names[id]}</div><button class="reset" data-r="${id}">تصفير</button></div><button class="c ${v>=100?"ok":""}" data-c="${id}">${v}<span style="font-size:11px;font-weight:400">/100</span></button></div>`}).join("");
   const dd=DD[n%DD.length],done=S.dd[k];
   $("#dd").innerHTML=`${hh("عمل اليوم: "+dd[0],"dd")}<p>${dd[1]}</p><p class="src">${dd[2]}</p>${sh("عمل يحبه الله: "+dd[0]+" — "+dd[2])}`;
+  ["vs","hd","lv","fb","dd"].forEach(i=>$("#"+i).classList.toggle("done",!!cks[i]));
   renderAz();
 }
 

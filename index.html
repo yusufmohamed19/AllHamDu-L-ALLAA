@@ -99,9 +99,9 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .it:active{transform:scale(.99)}
 .it.ok{opacity:.55;border-color:var(--pri)}.it.ok .ct{background:var(--pri);color:#fff}
 .it .rs{border:0;background:none;color:var(--mut);font-size:12px;cursor:pointer;padding:0}
-.prs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0 6px}
+.prs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 6px}
 .pr{border:1.5px solid var(--ln);background:var(--card);border-radius:14px;padding:8px 2px;text-align:center;cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-.pr b{display:block;font-size:14px}.pr .ptm{display:inline-block;font-size:12px;color:var(--mut);padding:2px 6px}
+.pr b{display:block;font-size:13px;line-height:1.35;min-height:35px;display:flex;align-items:center;justify-content:center}.pr .ptm{display:inline-block;font-size:12px;color:var(--mut);padding:2px 6px}
 .pr.now{border-color:var(--pri)}.pr.on{background:var(--pri);border-color:var(--pri);color:#fff}.pr.on .ptm{color:#e6f4ec}
 .ctl{display:flex;justify-content:center;gap:8px;margin:4px 0 10px}
 .ctl .sm{border:1px solid var(--ln);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;font-size:12px;padding:3px 10px;cursor:pointer}
@@ -114,13 +114,17 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .tk.poof{background:var(--pri);border-color:var(--pri);color:#fff;opacity:0;filter:blur(8px);transform:translateY(-34px) scale(1.25)}
 .tkx{border:0;background:none;color:inherit;opacity:.6;font-size:13px;cursor:pointer;padding:0 2px}
 .mid .rs,#tks .rs{border:0;background:none;color:var(--mut);font:inherit;font-size:12.5px;margin-top:4px;cursor:pointer}
+.tk{-webkit-touch-callout:none}
+.hh{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ck{width:30px;height:30px;border-radius:50%;border:2px solid var(--pri);background:var(--card);color:#fff;font-size:17px;line-height:1;padding:0;cursor:pointer;flex:none}
+.ck.on{background:var(--pri)}
 </style>
 </head>
 <body>
 <div class="top"><button class="nav" id="nx" aria-label="اليوم التالي">→</button><h1 id="dt">…<small id="hj"></small></h1><button class="nav" id="pv" aria-label="اليوم السابق">←</button></div>
 <div class="mot"><textarea id="mot" rows="2" placeholder="اكتب هنا جملتك التحفيزية…" aria-label="جملتي التحفيزية"></textarea></div>
 <div class="prs" id="prs"></div>
-<div class="ctl"><button class="sm" id="snd"></button><button class="sm" id="rm"></button></div>
+<div class="ctl"><button class="sm" id="snd"></button><button class="sm" id="rm"></button><button class="sm" id="cl">☁️ تسجيل الدخول بجوجل</button></div>
 <div class="mid"><button class="addb" id="add" aria-label="إضافة مهمة">+</button><div class="tks" id="tks"></div></div>
 
 <div class="az" id="az"></div>
@@ -178,7 +182,7 @@ const F=[
 ["إيذاء الجار","«والله لا يؤمن... الذي لا يأمن جاره بوائقه» (متفق عليه)"],
 ["الظلم","«يا عبادي إني حرمت الظلم على نفسي وجعلته بينكم محرمًا» (رواه مسلم)"],
 ["الكِبر","«لا يدخل الجنة من كان في قلبه مثقال ذرة من كبر» (رواه مسلم)"]];
-const D=["لا إله إلا الله وحده لا شريك له","لا حول ولا قوة إلا بالله","سبحان الله العظيم","الله أكبر","لا إله إلا الله","حسبي الله لا إله إلا هو"];
+const D=["سبحان الله وبحمده، سبحان الله العظيم", "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير", "لا حول ولا قوة إلا بالله", "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر", "أستغفر الله العظيم وأتوب إليه", "اللهم صل وسلم على نبينا محمد", "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم", "سبحان الله وبحمده عدد خلقه ورضا نفسه وزنة عرشه ومداد كلماته", "لا إله إلا أنت سبحانك إني كنت من الظالمين", "رضيت بالله ربًا وبالإسلام دينًا وبمحمد ﷺ نبيًا", "يا حي يا قيوم برحمتك أستغيث", "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار", "اللهم إني أسألك العفو والعافية في الدنيا والآخرة", "اللهم أعني على ذكرك وشكرك وحسن عبادتك", "لا إله إلا الله الملك الحق المبين", "سبحان الله والحمد لله ولا إله إلا الله والله أكبر ولا حول ولا قوة إلا بالله", "اللهم اغفر لي وارحمني واهدني وعافني وارزقني", "الحمد لله حمدًا كثيرًا طيبًا مباركًا فيه", "اللهم ثبت قلبي على دينك", "رب اغفر لي وتب علي إنك أنت التواب الرحيم", "اللهم إني أعوذ بك من الهم والحزن، والعجز والكسل", "سبحان الله وبحمده أستغفر الله وأتوب إليه", "اللهم آتِ نفسي تقواها وزكّها أنت خير من زكاها", "اللهم إنك عفو تحب العفو فاعف عني", "بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم", "اللهم اجعل في قلبي نورًا وفي لساني نورًا وفي سمعي نورًا وفي بصري نورًا", "ربنا ظلمنا أنفسنا وإن لم تغفر لنا وترحمنا لنكونن من الخاسرين", "اللهم إني أسألك علمًا نافعًا ورزقًا طيبًا وعملًا متقبلًا"];
 const C=[["dk1","ذكر اليوم"],["dk2","ذكر اليوم (2)"],["sub","سبحان الله وبحمده"],["sal","الصلاة على النبي ﷺ"],["ist","أستغفر الله"]];
 const DD=[
 ["الصلاة على وقتها","صلّ كل صلاة في أول وقتها النهارده، ولا تأخرها لآخر الوقت.","«أحب الأعمال إلى الله الصلاة على وقتها» (متفق عليه)"],
@@ -199,11 +203,11 @@ const DH=H;
 const DV=[];[[1,2,6],[2,152,5],[2,255,3],[2,284,3],[3,133,8],[3,159,3],[3,190,6],[4,36,3],[4,58,3],[6,162,2],[7,199,3],[8,2,4],[9,111,3],[10,57,4],[11,114,3],[13,28,6],[14,7,3],[15,97,3],[16,90,5],[17,23,8],[18,107,4],[20,25,8],[21,87,4],[23,1,11],[24,35,5],[25,63,15],[26,78,10],[28,77,3],[29,45,2],[30,21,3],[31,12,8],[33,41,10],[33,70,3],[35,29,4],[39,53,10],[41,30,10],[49,10,9],[51,56,3],[59,18,7],[93,1,11],[94,1,8],[103,1,3],[112,1,4],[36,1,83],[67,1,30],[55,1,78],[56,1,96],[57,1,29]].forEach(a=>{for(let i=0;i<a[2];i++)DV.push([a[0],a[1]+i])});DV.length=Math.min(DV.length,360);
 const SHARE="الدال على الخير كفاعله، وأن تشارك فيصلك الأجر بإذن الله";
 
-let S={pr:{},tk:{},days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{}};
+let S={pr:{},tk:{},ck:{},days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{}};
 try{S=Object.assign(S,JSON.parse(localStorage.getItem("yawmi")||"{}"))}catch(e){}
-delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.pr=S.pr||{};S.tk=S.tk||{};S.qd=S.qd||{};S.qf=S.qf||{};
-(function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd","pr","tk"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
-const save=()=>{try{localStorage.setItem("yawmi",JSON.stringify(S))}catch(e){}};
+delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.pr=S.pr||{};S.tk=S.tk||{};S.ck=S.ck||{};S.qd=S.qd||{};S.qf=S.qf||{};
+(function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd","pr","tk","ck"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
+const save=()=>{S._t=Date.now();try{localStorage.setItem("yawmi",JSON.stringify(S))}catch(e){}if(window.__push)window.__push()};
 let off=0,cur=0;
 const dk=o=>{const d=new Date();d.setDate(d.getDate()+o);return d};
 const key=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
@@ -213,10 +217,24 @@ const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+Stri
 (function(){const lim=iso(dk(-7));Object.keys(S.ov||{}).forEach(k=>{if(k.split("|")[0]<lim)delete S.ov[k]})})();
 function toast(t){const e=$("#ts");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",3500)}
 // المواعيد تتخزن 24 ساعة جوه التطبيق، وبتتعرض 12 ساعة (الظهر 2 مش 14)
-function times(d){d=d||new Date();const ik=iso(d),c=S.cal[ik]||{},o={};P.forEach(p=>{o[p[0]]=(S.ov||{})[ik+"|"+p[0]]||c[p[0]]||S.tm[p[0]]||p[2]});return o}
+const PR=[["fajr","الفجر وسنته"],["duha","الضحى"],["dhuhr","الظهر وسنته"],["asr","العصر وسنته"],["maghrib","المغرب وسنته"],["isha","العشاء وسنتها"],["qiyam","قيام الليل وسنته"]];
+function cairoOff(y,m,dd){try{const dt=new Date(Date.UTC(y,m,dd,12)),p=new Intl.DateTimeFormat("en-US",{timeZone:"Africa/Cairo",hourCycle:"h23",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric"}).formatToParts(dt),g=t=>+p.find(x=>x.type===t).value;return(Date.UTC(g("year"),g("month")-1,g("day"),g("hour"),g("minute"))-dt.getTime())/36e5}catch(e){return 2}}
+function calcT(d){const r=Math.PI/180,lat=30.0444,lng=31.2357,y=d.getFullYear(),m=d.getMonth(),dd=d.getDate(),
+  D=Date.UTC(y,m,dd,12)/864e5+2440587.5-2451545,fx=a=>((a%360)+360)%360,g=fx(357.529+0.98560028*D),q=fx(280.459+0.98564736*D),
+  L=fx(q+1.915*Math.sin(g*r)+0.02*Math.sin(2*g*r)),e=23.439-3.6e-7*D,RA=(((Math.atan2(Math.cos(e*r)*Math.sin(L*r),Math.cos(L*r))/r/15)%24)+24)%24;
+  let eq=q/15-RA;if(eq>12)eq-=24;if(eq<-12)eq+=24;
+  const de=Math.asin(Math.sin(e*r)*Math.sin(L*r)),noon=12+cairoOff(y,m,dd)-lng/15-eq,
+  T=an=>Math.acos((-Math.sin(an*r)-Math.sin(de)*Math.sin(lat*r))/(Math.cos(de)*Math.cos(lat*r)))/r/15,
+  aa=Math.atan(1/(1+Math.tan(Math.abs(lat*r-de)))),A=Math.acos((Math.sin(aa)-Math.sin(de)*Math.sin(lat*r))/(Math.cos(de)*Math.cos(lat*r)))/r/15;
+  return{fajr:noon-T(19.5),sunrise:noon-T(0.833),dhuhr:noon+0.0167,asr:noon+A,maghrib:noon+T(0.833),isha:noon+T(17.5)}}
+const hm=h=>{const t=Math.round(h*60),m=((t%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+const mm=t=>{const [a,b]=t.split(":").map(Number);return a*60+b};
+function baseT(d){const ik=iso(d),c=S.cal[ik]||{},z=calcT(d),o={};["fajr","sunrise","dhuhr","asr","maghrib","isha"].forEach(id=>o[id]=(S.ov||{})[ik+"|"+id]||c[id]||hm(z[id]));return o}
+function times(d){d=d||new Date();const b=baseT(d),n=baseT(new Date(d.getFullYear(),d.getMonth(),d.getDate()+1)),ik=iso(d),ov=S.ov||{},mg=mm(b.maghrib),nf=mm(n.fajr)+1440;
+  b.duha=ov[ik+"|duha"]||hm((mm(b.sunrise)+20)/60);b.qiyam=ov[ik+"|qiyam"]||hm((mg+(nf-mg)*2/3)/60);return b}
 function fmt12(t){const [h,m]=t.split(":").map(Number);return (h%12||12)+":"+String(m).padStart(2,"0")}
 const toLat=x=>x.replace(/[٠-٩]/g,c=>"٠١٢٣٤٥٦٧٨٩".indexOf(c)).replace(/[٫.]/g,":");
-function to24(id,h){if(h>=13||h===0)return h;if(id==="fajr")return h;if(id==="dhuhr")return h<11?h+12:h;return h<12?h+12:h}
+function to24(id,h){if(id==="duha")return h;if(id==="qiyam")return h>=9&&h<12?h+12:(h===12?0:h);if(h>=13||h===0)return h;if(id==="fajr")return h;if(id==="dhuhr")return h<11?h+12:h;return h<12?h+12:h}
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function render(){
@@ -226,25 +244,28 @@ function render(){
   let h="";try{h=d.toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"})}catch(e){}
   $("#hj").textContent=h;
   const pd=S.pr[k]||{},tm=times(d);
-  $("#prs").innerHTML=P.map((p,i)=>`<div class="pr${pd[p[0]]?" on":""}${i==cur&&off==0?" now":""}" data-p="${p[0]}" role="button"><b>${pd[p[0]]?"✓ ":""}${p[1]}</b><span class="ptm" data-pt="${p[0]}">${fmt12(tm[p[0]])}</span></div>`).join("");
+  const cid=P[cur]?P[cur][0]:"";
+  $("#prs").innerHTML=PR.map(p=>`<div class="pr${pd[p[0]]?" on":""}${p[0]==cid&&off==0?" now":""}" data-p="${p[0]}" role="button"><b>${pd[p[0]]?"✓ ":""}${p[1]}</b><span class="ptm" data-pt="${p[0]}">${fmt12(tm[p[0]])}</span></div>`).join("");
   $("#snd").textContent="🔔 الأذان: "+(S.snd?"تشغيل":"إيقاف");
   $("#rm").textContent="⏰ تذكير: "+(S.rem?S.rem+"د":"إيقاف");
   const tks=S.tk[k]||[],dn=tks.filter(t=>t.x).length;
   $("#tks").innerHTML=tks.map((t,j)=>t.x?"":`<div class="tk" data-j="${j}" role="button"><span>${esc(t.t)}</span><button class="tkx" data-x="${j}" aria-label="حذف">✕</button></div>`).join("")
    +(!tks.length?'<div class="hint" style="width:100%">اضغط + وضيف مهامك، واضغط على المهمة لما تخلصها فتتبخر</div>':(dn===tks.length?'<div class="hint" style="width:100%">ما شاء الله، خلصت كل مهامك ✨</div>':""))
    +(dn?`<button class="rs" id="rvt" style="width:100%">↺ رجّع المهام اللي خلصت (${dn})</button>`:"");
-  const l=L[n%7],f=F[n%7];
+  const l=L[n%7],f=F[n%7],cks=(S.ck=S.ck||{})[k]||{};
+  const ck=id=>`<button class="ck${cks[id]?" on":""}" data-ck="${id}" aria-label="تمت">${cks[id]?"✓":""}</button>`;
+  const hh=(t,id)=>`<h3 class="hh"><span>${t}</span>${ck(id)}</h3>`;
   const sh=t=>`<button class="share" data-s="${t}">شارك واكسب الأجر</button>`;
   const dv=window.QT&&DV[n%DV.length],v0=V[n%7],hd=DH[n%DH.length];
-  $("#vs").innerHTML=dv?`<h3>آية اليوم</h3><p>﴿${QT[dv[0]-1][dv[1]-1]}﴾</p><p class="src">${QN[dv[0]-1]}: ${dv[1]}</p>${sh("﴿"+QT[dv[0]-1][dv[1]-1]+"﴾ ("+QN[dv[0]-1]+": "+dv[1]+")")}`:`<h3>آية اليوم</h3><p>${v0[0]}</p><p class="src">${v0[1]}</p><p>${v0[2]}</p>${sh(v0[0])}`;
-  $("#hd").innerHTML=`<h3>حديث اليوم</h3><p>${hd[0]}</p><p class="src">${hd[1]}</p><p>${hd[2]}</p>${sh(hd[0])}`;
-  $("#lv").innerHTML=`<h3>حاجة ربنا يحبها: ${l[0]}</h3><p>${l[1]}</p><p class="src">${SHARE}</p>${sh("ما يحبه الله: "+l[0]+" — "+l[1])}`;
-  $("#fb").innerHTML=`<h3>حاجة ربنا حرّمها منتشرة بينا: ${f[0]}</h3><p>${f[1]}</p><p class="src">لو واحد بس عرف إن ده حرام وتركه، لك مثل أجره.</p>${sh("من المحرمات: "+f[0]+" — "+f[1])}`;
+  $("#vs").innerHTML=dv?`${hh("آية اليوم","vs")}<p>﴿${QT[dv[0]-1][dv[1]-1]}﴾</p><p class="src">${QN[dv[0]-1]}: ${dv[1]}</p>${sh("﴿"+QT[dv[0]-1][dv[1]-1]+"﴾ ("+QN[dv[0]-1]+": "+dv[1]+")")}`:`${hh("آية اليوم","vs")}<p>${v0[0]}</p><p class="src">${v0[1]}</p><p>${v0[2]}</p>${sh(v0[0])}`;
+  $("#hd").innerHTML=`${hh("حديث اليوم","hd")}<p>${hd[0]}</p><p class="src">${hd[1]}</p><p>${hd[2]}</p>${sh(hd[0])}`;
+  $("#lv").innerHTML=`${hh("حاجة ربنا يحبها: "+l[0],"lv")}<p>${l[1]}</p><p class="src">${SHARE}</p>${sh("ما يحبه الله: "+l[0]+" — "+l[1])}`;
+  $("#fb").innerHTML=`${hh("حاجة ربنا حرّمها منتشرة بينا: "+f[0],"fb")}<p>${f[1]}</p><p class="src">لو واحد بس عرف إن ده حرام وتركه، لك مثل أجره.</p>${sh("من المحرمات: "+f[0]+" — "+f[1])}`;
   const c=S.cnt[k]=S.cnt[k]||{};
-  const names={dk1:D[n%6],dk2:D[(n+3)%6],sub:"سبحان الله وبحمده",sal:"اللهم صل وسلم على نبينا محمد",ist:"أستغفر الله"};
-  $("#cn").innerHTML=C.map(([id,t])=>{const v=c[id]||0;return `<div class="card cnt"><div><h3>${t}</h3><div style="font-size:14px">${names[id]}</div><button class="reset" data-r="${id}">تصفير</button></div><button class="c ${v>=100?"ok":""}" data-c="${id}">${v}<span style="font-size:11px;font-weight:400">/100</span></button></div>`}).join("");
+  const names={dk1:D[n%D.length],dk2:D[(n+13)%D.length],sub:"سبحان الله وبحمده",sal:"اللهم صل وسلم على نبينا محمد",ist:"أستغفر الله"};
+  $("#cn").innerHTML=C.map(([id,t])=>{const v=c[id]||0;return `<div class="card cnt"><div>${id=="dk1"||id=="dk2"?hh(t,id):`<h3>${t}</h3>`}<div style="font-size:14px">${names[id]}</div><button class="reset" data-r="${id}">تصفير</button></div><button class="c ${v>=100?"ok":""}" data-c="${id}">${v}<span style="font-size:11px;font-weight:400">/100</span></button></div>`}).join("");
   const dd=DD[n%DD.length],done=S.dd[k];
-  $("#dd").innerHTML=`<h3>عمل اليوم: ${dd[0]}</h3><p>${dd[1]}</p><p class="src">${dd[2]}</p><button class="dn ${done?"on":""}" data-dd="1">${done?"✓ عملته، تقبل الله":"عملته"}</button> ${sh("عمل يحبه الله: "+dd[0]+" — "+dd[2])}`;
+  $("#dd").innerHTML=`${hh("عمل اليوم: "+dd[0],"dd")}<p>${dd[1]}</p><p class="src">${dd[2]}</p>${sh("عمل يحبه الله: "+dd[0]+" — "+dd[2])}`;
   renderAz();
 }
 
@@ -264,7 +285,14 @@ $("#nx").onclick=()=>{off++;render()};$("#pv").onclick=()=>{off--;render()};
 $("#add").onclick=()=>{const t=prompt("اكتب المهمة");if(t&&t.trim()){const k=key(dk(off));(S.tk[k]=S.tk[k]||[]).push({t:t.trim(),x:0});save();render()}};
 $("#snd").onclick=()=>{S.snd=!S.snd;save();render();if(S.snd)beep()};
 $("#rm").onclick=()=>{const v=prompt("التذكير قبل الأذان بكام دقيقة؟ (0 للإيقاف)",S.rem);if(v!==null&&!isNaN(+v)){S.rem=+v;save();render();if(S.rem)remindSound()}};
+let lpT=0,lpDone=false;
+document.addEventListener("pointerdown",e=>{lpDone=false;clearTimeout(lpT);const tk=e.target.closest(".tk");if(!tk||e.target.closest(".tkx"))return;
+  lpT=setTimeout(()=>{lpDone=true;const k=key(dk(off)),t=(S.tk[k]||[])[+tk.dataset.j];if(!t)return;const v=prompt("عدّل المهمة",t.t);if(v&&v.trim()){t.t=v.trim();save();render()}},550)});
+["pointerup","pointercancel","pointermove"].forEach(ev=>document.addEventListener(ev,()=>clearTimeout(lpT)));
+document.addEventListener("contextmenu",e=>{if(e.target.closest(".tk"))e.preventDefault()});
 document.addEventListener("click",e=>{const k=key(dk(off));
+  const c2=e.target.closest(".ck");if(c2){S.ck=S.ck||{};const o=S.ck[k]=S.ck[k]||{};o[c2.dataset.ck]=o[c2.dataset.ck]?0:1;save();render();if(o[c2.dataset.ck]&&navigator.vibrate)navigator.vibrate(40);return}
+  if(lpDone&&e.target.closest(".tk")){lpDone=false;return}
   const pt=e.target.closest(".ptm");if(pt){e.stopPropagation();editTime(pt.dataset.pt);return}
   const pr=e.target.closest(".pr");if(pr){const o=S.pr[k]=S.pr[k]||{};o[pr.dataset.p]=o[pr.dataset.p]?0:1;save();render();if(o[pr.dataset.p]&&navigator.vibrate)navigator.vibrate(40);return}
   const x=e.target.closest(".tkx");if(x){e.stopPropagation();if(confirm("حذف المهمة؟")){S.tk[k].splice(+x.dataset.x,1);save();render()}return}
@@ -455,7 +483,7 @@ function loadCal(){const n=new Date(),nx=new Date(n.getFullYear(),n.getMonth()+1
   )).then(r=>{
     const cal=Object.assign({},S.cal),lim=iso(dk(-2));let ok=0;
     r.forEach(arr=>{if(!Array.isArray(arr))return;ok++;arr.forEach(x=>{const g=x.date.gregorian.date.split("-"),T=x.timings;
-      cal[g[2]+"-"+g[1]+"-"+g[0]]={fajr:T.Fajr.slice(0,5),dhuhr:T.Dhuhr.slice(0,5),asr:T.Asr.slice(0,5),maghrib:T.Maghrib.slice(0,5),isha:T.Isha.slice(0,5)}})});
+      cal[g[2]+"-"+g[1]+"-"+g[0]]={fajr:T.Fajr.slice(0,5),dhuhr:T.Dhuhr.slice(0,5),asr:T.Asr.slice(0,5),maghrib:T.Maghrib.slice(0,5),isha:T.Isha.slice(0,5),sunrise:T.Sunrise.slice(0,5)}})});
     if(!ok)return;Object.keys(cal).forEach(k=>{if(k<lim)delete cal[k]});S.cal=cal;
     const td=cal[iso(new Date())];if(td)S.tm=Object.assign({},td);
     save();render()}).catch(()=>{})}
@@ -488,5 +516,7 @@ $("#khn").onclick=hideKhatm;
 $("#khc").onclick=()=>{const t=KHATM.join("\n");if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>toast("تم نسخ الدعاء"),()=>{})}};
 cur=curIdx();render();grow();document.addEventListener("DOMContentLoaded",()=>{if(!azSc)render()});if(S.q.pend)showKhatm();
 </script>
+<script src="firebase-config.js"></script>
+<script src="sync.js"></script>
 </body>
 </html>

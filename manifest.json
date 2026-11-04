@@ -1,6 +1,6 @@
 {
-  "name": "يومي مع الصلاة",
-  "short_name": "يومي",
+  "name": "نظام المُسلم الذكي",
+  "short_name": "المُسلم الذكي",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

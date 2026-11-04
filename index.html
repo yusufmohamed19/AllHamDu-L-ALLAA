@@ -10,10 +10,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="يومي">
-<title>يومي مع الصلاة</title>
+<title>نظام المُسلم الذكي</title>
+<script src="content.js"></script>
 <script>window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__dp=e;if(window.__onDp)window.__onDp()});</script>
 <style>
-:root{--bg:#f7f5ef;--card:#fff;--tx:#1d2a24;--mut:#6b776f;--pri:#0f7a4d;--acc:#d63a3a;--ln:#e4e0d4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg:#f4efe3;--card:#fffdf8;--tx:#1b2b24;--mut:#6b756d;--pri:#0b6b4a;--gold:#b08a3e;--acc:#d63a3a;--ln:#e4e0d4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1713;--card:#18231d;--tx:#eef3ef;--mut:#9aaaa0;--pri:#3ecf8e;--acc:#ff6b6b;--ln:#2a3a31}}
 :root[data-theme="dark"]{--bg:#0f1713;--card:#18231d;--tx:#eef3ef;--mut:#9aaaa0;--pri:#3ecf8e;--acc:#ff6b6b;--ln:#2a3a31}
 *{box-sizing:border-box}html,body{margin:0}
@@ -69,6 +70,7 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .qt .an{color:var(--pri);font-size:19px}
 .qb{display:block;width:100%;margin-top:10px;border:2px solid var(--pri);background:var(--card);color:var(--pri);border-radius:14px;padding:10px;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
 .qi.ok .qb{background:var(--pri);color:#fff}
+.qbar{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;align-items:center;font-size:13px;color:var(--mut);margin:0 0 8px}.qx{border:1px solid var(--ln);background:var(--card);color:var(--mut);border-radius:10px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer}
 .khm{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:40;display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 .khm.show{display:flex}
 .khb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:22px 16px 12px;max-width:760px;width:100%;margin:0 auto;text-align:center}
@@ -125,9 +127,23 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .card.done .reset{color:#e6f4ec}
 .card.done button.c,.card.done .cnt button.c,.card.done .c.ok{background:#fff;color:var(--pri);border-color:#fff}
 .card{transition:background .3s,color .3s}
+.brand{text-align:center;margin:0 -14px 6px;padding:14px 10px 12px;background:linear-gradient(160deg,#0b4f39,#0b6b4a);color:#f5e7bf;border-bottom:3px solid var(--gold);border-radius:0 0 22px 22px}
+.bsm{font-size:12.5px;opacity:.85}.bt{font-size:24px;font-weight:800;margin-top:2px;letter-spacing:.3px}
+.card{box-shadow:0 2px 8px rgba(40,60,45,.07);border-color:#e6dcc3}
+.card h3{color:var(--pri)}
+#dly{display:grid;gap:10px;margin:12px 0}
+.ctx{font-size:15px;font-weight:700;margin:2px 0 4px}.cbd{font-size:14px;margin:3px 0}
+.pl{margin:18px 0 10px;text-align:center}.pl h2{font-size:17px;color:var(--pri);margin:0 0 10px;line-height:1.9}.pl small{color:var(--gold);font-size:15px}
+.pls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pld{background:var(--card);border:1.5px solid var(--gold);border-radius:14px;padding:10px 8px;font-size:13px;line-height:1.7;cursor:pointer;-webkit-user-select:none;user-select:none}
+.pld.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.plb{font-size:20px;font-weight:800;color:var(--pri);margin:18px 0 6px}
+.vf{font-size:12px;color:var(--mut);margin:6px 0 0}.vf a{color:var(--pri)}.card.done .vf,.card.done .vf a{color:#fff}
+.refs{text-align:center;font-size:12px;color:var(--mut)}.refs a{color:var(--pri)}
 </style>
 </head>
 <body>
+<div class="brand"><div class="bsm">بسم الله الرحمن الرحيم</div><div class="bt">نظام المُسلم الذكي</div></div>
 <div class="top"><button class="nav" id="nx" aria-label="اليوم التالي">→</button><h1 id="dt">…<small id="hj"></small></h1><button class="nav" id="pv" aria-label="اليوم السابق">←</button></div>
 <div class="mot"><textarea id="mot" rows="2" placeholder="اكتب هنا جملتك التحفيزية…" aria-label="جملتي التحفيزية"></textarea></div>
 <div class="prs" id="prs"></div>
@@ -137,14 +153,9 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 <div class="az" id="az"></div>
 <div class="azm" id="azm"><div class="azh"><button id="azx">✕ إغلاق</button><div class="t"><b id="azt"></b><small id="azp"></small></div><button id="azr">إعادة</button></div><div class="azb"><i id="azbar"></i></div><div id="azl"></div></div>
 
-<div class="grid">
-  <div class="card" id="vs"></div>
-  <div class="card" id="hd"></div>
-  <div class="card" id="lv"></div>
-  <div class="card" id="fb"></div>
-</div>
-<div class="grid" id="cn"></div>
-<div class="card dd" id="dd"></div>
+<div id="dly"></div>
+<div class="pl"><h2>﴿لَلَّهُ أَشَدُّ فَرَحًا بِتَوْبَةِ أَحَدِكُمْ﴾<br><small>عاهدت الله على:</small></h2><div class="pls" id="pls"></div><p class="plb">فقط لرضا الله سبحانه وتعالى</p></div>
+<p class="refs">المراجع: <a href="https://dorar.net/">dorar.net</a> · <a href="https://sunnah.com/">sunnah.com</a></p>
 
 <div class="khm" id="khm"><div class="khb"><div style="font-size:46px">🌙</div><h2>تقبل الله، ختمت القرآن الكريم</h2><p class="sb" id="khs"></p>
 <div class="du" id="khd"></div></div>
@@ -189,7 +200,7 @@ const F=[
 ["إيذاء الجار","«والله لا يؤمن... الذي لا يأمن جاره بوائقه» (متفق عليه)"],
 ["الظلم","«يا عبادي إني حرمت الظلم على نفسي وجعلته بينكم محرمًا» (رواه مسلم)"],
 ["الكِبر","«لا يدخل الجنة من كان في قلبه مثقال ذرة من كبر» (رواه مسلم)"]];
-const D=["سبحان الله وبحمده، سبحان الله العظيم", "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير", "لا حول ولا قوة إلا بالله", "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر", "أستغفر الله العظيم وأتوب إليه", "اللهم صل وسلم على نبينا محمد", "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم", "سبحان الله وبحمده عدد خلقه ورضا نفسه وزنة عرشه ومداد كلماته", "لا إله إلا أنت سبحانك إني كنت من الظالمين", "رضيت بالله ربًا وبالإسلام دينًا وبمحمد ﷺ نبيًا", "يا حي يا قيوم برحمتك أستغيث", "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار", "اللهم إني أسألك العفو والعافية في الدنيا والآخرة", "اللهم أعني على ذكرك وشكرك وحسن عبادتك", "لا إله إلا الله الملك الحق المبين", "سبحان الله والحمد لله ولا إله إلا الله والله أكبر ولا حول ولا قوة إلا بالله", "اللهم اغفر لي وارحمني واهدني وعافني وارزقني", "الحمد لله حمدًا كثيرًا طيبًا مباركًا فيه", "اللهم ثبت قلبي على دينك", "رب اغفر لي وتب علي إنك أنت التواب الرحيم", "اللهم إني أعوذ بك من الهم والحزن، والعجز والكسل", "سبحان الله وبحمده أستغفر الله وأتوب إليه", "اللهم آتِ نفسي تقواها وزكّها أنت خير من زكاها", "اللهم إنك عفو تحب العفو فاعف عني", "بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم", "اللهم اجعل في قلبي نورًا وفي لساني نورًا وفي سمعي نورًا وفي بصري نورًا", "ربنا ظلمنا أنفسنا وإن لم تغفر لنا وترحمنا لنكونن من الخاسرين", "اللهم إني أسألك علمًا نافعًا ورزقًا طيبًا وعملًا متقبلًا"];
+const D=["سبحان الله وبحمده، سبحان الله العظيم", "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير", "لا حول ولا قوة إلا بالله", "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر", "أستغفر الله العظيم وأتوب إليه", "اللهم صل وسلم على نبينا محمد", "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم", "سبحان الله وبحمده عدد خلقه ورضا نفسه وزنة عرشه ومداد كلماته", "لا إله إلا أنت سبحانك إني كنت من الظالمين", "رضيت بالله ربًا وبالإسلام دينًا وبمحمد ﷺ نبيًا", "يا حي يا قيوم برحمتك أستغيث", "ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار", "اللهم إني أسألك العفو والعافية في الدنيا والآخرة", "اللهم أعني على ذكرك وشكرك وحسن عبادتك", "سبحان الله والحمد لله ولا إله إلا الله والله أكبر ولا حول ولا قوة إلا بالله", "اللهم اغفر لي وارحمني واهدني وعافني وارزقني", "الحمد لله حمدًا كثيرًا طيبًا مباركًا فيه", "اللهم ثبت قلبي على دينك", "رب اغفر لي وتب علي إنك أنت التواب الرحيم", "اللهم إني أعوذ بك من الهم والحزن، والعجز والكسل", "سبحان الله وبحمده أستغفر الله وأتوب إليه", "اللهم آتِ نفسي تقواها وزكّها أنت خير من زكاها", "اللهم إنك عفو تحب العفو فاعف عني", "بسم الله الذي لا يضر مع اسمه شيء في الأرض ولا في السماء وهو السميع العليم", "اللهم اجعل في قلبي نورًا وفي لساني نورًا وفي سمعي نورًا وفي بصري نورًا", "ربنا ظلمنا أنفسنا وإن لم تغفر لنا وترحمنا لنكونن من الخاسرين", "اللهم إني أسألك علمًا نافعًا ورزقًا طيبًا وعملًا متقبلًا"];
 const C=[["dk1","ذكر اليوم"],["dk2","ذكر اليوم (2)"],["sub","سبحان الله وبحمده"],["sal","الصلاة على النبي ﷺ"],["ist","أستغفر الله"]];
 const DD=[
 ["الصلاة على وقتها","صلّ كل صلاة في أول وقتها النهارده، ولا تأخرها لآخر الوقت.","«أحب الأعمال إلى الله الصلاة على وقتها» (متفق عليه)"],
@@ -203,16 +214,18 @@ const DD=[
 ["التحاب في الله","اتصل بصديق أو قريب لوجه الله وقل له: «أحبك في الله».","حديث قدسي: «وجبت محبتي للمتحابين فيّ» (رواه مالك وأحمد وصححه الألباني)"],
 ["الحياء والستر","احفظ لسانك وعينك النهارده، واستر على من رأيت منه زلّة ولا تفضحه.","«إن الله حيي ستير يحب الحياء والستر» (رواه أبو داود وصححه الألباني)"]];
 
-H.push(["«الطُّهور شطر الإيمان»","رواه مسلم","النظافة والوضوء من أعظم أسباب الأجر، ونصف الإيمان."],["«اتق الله حيثما كنت، وأتبع السيئة الحسنة تمحها، وخالق الناس بخلق حسن»","رواه الترمذي","التقوى في السر والعلن، والحسنة بعد الذنب تمحوه، وحسن الخلق مع الناس."],["«من كان يؤمن بالله واليوم الآخر فليقل خيرًا أو ليصمت»","متفق عليه","حفظ اللسان من علامات الإيمان."],["«المسلم من سلم المسلمون من لسانه ويده»","متفق عليه","كمال الإسلام في أن يأمنك الناس."],["«من حسن إسلام المرء تركه ما لا يعنيه»","رواه الترمذي","اشتغل بما ينفعك واترك الفضول."],["«لا تغضب»","رواه البخاري","وصية النبي ﷺ لمن طلب نصيحة موجزة، فاملك نفسك عند الغضب."],["«الدين النصيحة»","رواه مسلم","النصح لله ولكتابه ولرسوله ولأئمة المسلمين وعامتهم."],["«خيركم من تعلم القرآن وعلمه»","رواه البخاري","أفضل الناس من تعلم القرآن وعلّمه غيره."],["«ليس الشديد بالصرعة، إنما الشديد الذي يملك نفسه عند الغضب»","متفق عليه","القوة الحقيقية في ضبط النفس."],["«من لا يرحم لا يرحم»","متفق عليه","ارحم الناس والحيوان يرحمك الله."],["«من صلى البردين دخل الجنة»","متفق عليه","المحافظة على الفجر والعصر سبب لدخول الجنة."],["«من قال سبحان الله وبحمده في يوم مائة مرة حطت خطاياه وإن كانت مثل زبد البحر»","متفق عليه","ذكر يسير وأجر عظيم."],["«كلمتان خفيفتان على اللسان، ثقيلتان في الميزان، حبيبتان إلى الرحمن: سبحان الله وبحمده، سبحان الله العظيم»","متفق عليه","خفة الذكر على اللسان وثقله في الميزان."],["«من صلى عليّ صلاة صلى الله عليه بها عشرًا»","رواه مسلم","كل صلاة على النبي ﷺ بعشر صلوات من الله عليك."]);
+H.push(["«الطُّهور شطر الإيمان»","رواه مسلم","النظافة والوضوء من أعظم أسباب الأجر، ونصف الإيمان."],["«اتق الله حيثما كنت، وأتبع السيئة الحسنة تمحها، وخالق الناس بخلق حسن»","رواه الترمذي (1987) وقال: حديث حسن ✓ راجعته على sunnah.com (الأربعون النووية 18)","التقوى في السر والعلن، والحسنة بعد الذنب تمحوه، وحسن الخلق مع الناس."],["«من كان يؤمن بالله واليوم الآخر فليقل خيرًا أو ليصمت»","متفق عليه","حفظ اللسان من علامات الإيمان."],["«المسلم من سلم المسلمون من لسانه ويده»","متفق عليه","كمال الإسلام في أن يأمنك الناس."],["«من حسن إسلام المرء تركه ما لا يعنيه»","حديث حسن، رواه الترمذي (2318) وابن ماجه (3976) ✓ راجعته على sunnah.com (الأربعون النووية 12)","اشتغل بما ينفعك واترك الفضول."],["«لا تغضب»","رواه البخاري","وصية النبي ﷺ لمن طلب نصيحة موجزة، فاملك نفسك عند الغضب."],["«الدين النصيحة»","رواه مسلم ✓ راجعته على sunnah.com (الأربعون النووية 7)","النصح لله ولكتابه ولرسوله ولأئمة المسلمين وعامتهم."],["«خيركم من تعلم القرآن وعلمه»","رواه البخاري","أفضل الناس من تعلم القرآن وعلّمه غيره."],["«ليس الشديد بالصرعة، إنما الشديد الذي يملك نفسه عند الغضب»","متفق عليه","القوة الحقيقية في ضبط النفس."],["«من لا يرحم لا يرحم»","متفق عليه","ارحم الناس والحيوان يرحمك الله."],["«من صلى البردين دخل الجنة»","متفق عليه","المحافظة على الفجر والعصر سبب لدخول الجنة."],["«من قال سبحان الله وبحمده في يوم مائة مرة حطت خطاياه وإن كانت مثل زبد البحر»","متفق عليه","ذكر يسير وأجر عظيم."],["«كلمتان خفيفتان على اللسان، ثقيلتان في الميزان، حبيبتان إلى الرحمن: سبحان الله وبحمده، سبحان الله العظيم»","متفق عليه","خفة الذكر على اللسان وثقله في الميزان."],["«من صلى عليّ صلاة صلى الله عليه بها عشرًا»","رواه مسلم","كل صلاة على النبي ﷺ بعشر صلوات من الله عليك."]);
 DD.push(["الابتسامة","ابتسم في وجه كل من تقابله النهارده.","«تبسمك في وجه أخيك لك صدقة» (رواه الترمذي)"],["الصدقة","تصدق النهارده بأي مبلغ ولو صغير.","«اتقوا النار ولو بشق تمرة» (متفق عليه)"],["السواك","استخدم السواك أو نظف أسنانك قبل كل صلاة.","«لولا أن أشق على أمتي لأمرتهم بالسواك عند كل صلاة» (متفق عليه)"],["إماطة الأذى","شيل أي حاجة تؤذي الناس من الطريق.","«وتميط الأذى عن الطريق صدقة» (متفق عليه)"],["سقي الماء","اسق إنسانًا أو حيوانًا عطشان.","«في كل كبد رطبة أجر» (متفق عليه)"],["عيادة المريض","زر مريضًا أو اتصل به واطمئن عليه.","«إذا عاد المسلم أخاه لم يزل في خرفة الجنة» (رواه مسلم)"],["الدعاء بظهر الغيب","ادع لأخ أو صديق في غيابه بخير.","«دعوة المرء المسلم لأخيه بظهر الغيب مستجابة» (رواه مسلم)"],["صلة الرحم","اتصل بقريب انقطعت عنه أو زره.","«من أحب أن يبسط له في رزقه فليصل رحمه» (متفق عليه)"],["حفظ آية","احفظ آية جديدة أو راجع آيات حفظتها.","«خيركم من تعلم القرآن وعلمه» (رواه البخاري)"],["إفشاء السلام","ابدأ بالسلام على كل من تقابله.","«أفشوا السلام بينكم» (رواه مسلم)"],["صيام النافلة","صم يومًا نافلة (الاثنين أو الخميس أو ثلاثة أيام من الشهر).","«من صام يومًا في سبيل الله باعد الله وجهه عن النار سبعين خريفًا» (متفق عليه)"],["الاستغفار","استغفر الله 100 مرة النهارده.","«إني لأستغفر الله وأتوب إليه في اليوم أكثر من سبعين مرة» (رواه البخاري)"],["سنة الفجر","صلّ ركعتي سنة الفجر بتركيز.","«ركعتا الفجر خير من الدنيا وما فيها» (رواه مسلم)"],["العلم النافع","انشر علمًا نافعًا أو ساهم في عمل خير مستمر.","«إذا مات ابن آدم انقطع عمله إلا من ثلاث: صدقة جارية، أو علم ينتفع به، أو ولد صالح يدعو له» (رواه مسلم)"],["حسن الخلق","عامل كل من حولك بأحسن خلق النهارده.","«إن من أحبكم إليّ وأقربكم مني مجلسًا يوم القيامة أحاسنكم أخلاقًا» (رواه الترمذي)"]);
 const DH=H;
 // آية لكل يوم من 360: (سورة، أول آية، العدد) والنص بيتجاب من مصحف quran.js
 const DV=[];[[1,2,6],[2,152,5],[2,255,3],[2,284,3],[3,133,8],[3,159,3],[3,190,6],[4,36,3],[4,58,3],[6,162,2],[7,199,3],[8,2,4],[9,111,3],[10,57,4],[11,114,3],[13,28,6],[14,7,3],[15,97,3],[16,90,5],[17,23,8],[18,107,4],[20,25,8],[21,87,4],[23,1,11],[24,35,5],[25,63,15],[26,78,10],[28,77,3],[29,45,2],[30,21,3],[31,12,8],[33,41,10],[33,70,3],[35,29,4],[39,53,10],[41,30,10],[49,10,9],[51,56,3],[59,18,7],[93,1,11],[94,1,8],[103,1,3],[112,1,4],[36,1,83],[67,1,30],[55,1,78],[56,1,96],[57,1,29]].forEach(a=>{for(let i=0;i<a[2];i++)DV.push([a[0],a[1]+i])});DV.length=Math.min(DV.length,360);
 const SHARE="الدال على الخير كفاعله، وأن تشارك فيصلك الأجر بإذن الله";
 
-let S={pr:{},tk:{},ck:{},days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{}};
+let S={pr:{},tk:{},ck:{},days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{},qt:{}};
 try{S=Object.assign(S,JSON.parse(localStorage.getItem("yawmi")||"{}"))}catch(e){}
-delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.pr=S.pr||{};S.tk=S.tk||{};S.ck=S.ck||{};S.qd=S.qd||{};S.qf=S.qf||{};
+delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.pr=S.pr||{};S.tk=S.tk||{};S.ck=S.ck||{};S.qd=S.qd||{};S.qf=S.qf||{};S.qt=S.qt||{};
+// ترحيل مرة واحدة: اللي اتقرأ من صفحات "اليوم" القديمة (من غير ما اليوم يخلص) يتحسب في مكان الوقوف
+(function(){if(S.q.v)return;S.q.v=1;Object.keys(S.qd).forEach(k=>{if(S.qf[k])return;const st=S.qd[k],a=((S.az||{})[k]||{}).q||[];let c=0;while(c<10&&(a[c]||0)>=1)c++;if(c>0){const np=(st-1)+c;if(np>S.q.p&&np<604)S.q.p=np}})})();
 (function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd","pr","tk","ck"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
 const save=()=>{S._t=Date.now();try{localStorage.setItem("yawmi",JSON.stringify(S))}catch(e){}if(window.__push)window.__push()};
 let off=0,cur=0;
@@ -259,21 +272,19 @@ function render(){
   $("#tks").innerHTML=tks.map((t,j)=>t.x?"":`<div class="tk" data-j="${j}" role="button"><span>${esc(t.t)}</span><button class="tkx" data-x="${j}" aria-label="حذف">✕</button></div>`).join("")
    +(!tks.length?'<div class="hint" style="width:100%">اضغط + وضيف مهامك، واضغط على المهمة لما تخلصها فتتبخر</div>':(dn===tks.length?'<div class="hint" style="width:100%">ما شاء الله، خلصت كل مهامك ✨</div>':""))
    +(dn?`<button class="rs" id="rvt" style="width:100%">↺ رجّع المهام اللي خلصت (${dn})</button>`:"");
-  const l=L[n%7],f=F[n%7],cks=(S.ck=S.ck||{})[k]||{};
+  const cks=(S.ck=S.ck||{})[k]||{},CT=Object.assign({},window.CT||{});
+  const X=window.CT||{};CT.lv=L.map(x=>[x[0],x[1],SHARE]).concat(X.lv||[]);CT.fb=F.map(x=>[x[0],x[1],"لو واحد بس عرف إن ده حرام وتركه، لك مثل أجره."]).concat(X.fb||[]);CT.dd=DD.concat(X.dd||[]);
   const ck=id=>`<button class="ck${cks[id]?" on":""}" data-ck="${id}" aria-label="تمت">${cks[id]?"✓":""}</button>`;
   const hh=(t,id)=>`<h3 class="hh"><span>${t}</span>${ck(id)}</h3>`;
-  const sh=t=>`<button class="share" data-s="${t}">شارك واكسب الأجر</button>`;
-  const dv=window.QT&&DV[n%DV.length],v0=V[n%7],hd=DH[n%DH.length];
-  $("#vs").innerHTML=dv?`${hh("آية اليوم","vs")}<p>﴿${QT[dv[0]-1][dv[1]-1]}﴾</p><p class="src">${QN[dv[0]-1]}: ${dv[1]}</p>${sh("﴿"+QT[dv[0]-1][dv[1]-1]+"﴾ ("+QN[dv[0]-1]+": "+dv[1]+")")}`:`${hh("آية اليوم","vs")}<p>${v0[0]}</p><p class="src">${v0[1]}</p><p>${v0[2]}</p>${sh(v0[0])}`;
-  $("#hd").innerHTML=`${hh("حديث اليوم","hd")}<p>${hd[0]}</p><p class="src">${hd[1]}</p><p>${hd[2]}</p>${sh(hd[0])}`;
-  $("#lv").innerHTML=`${hh("حاجة ربنا يحبها: "+l[0],"lv")}<p>${l[1]}</p><p class="src">${SHARE}</p>${sh("ما يحبه الله: "+l[0]+" — "+l[1])}`;
-  $("#fb").innerHTML=`${hh("حاجة ربنا حرّمها منتشرة بينا: "+f[0],"fb")}<p>${f[1]}</p><p class="src">لو واحد بس عرف إن ده حرام وتركه، لك مثل أجره.</p>${sh("من المحرمات: "+f[0]+" — "+f[1])}`;
+  const sh=t=>`<button class="share" data-s="${esc(t)}">شارك واكسب الأجر</button>`;
   const c=S.cnt[k]=S.cnt[k]||{};
-  const names={dk1:D[n%D.length],dk2:D[(n+13)%D.length],sub:"سبحان الله وبحمده",sal:"اللهم صل وسلم على نبينا محمد",ist:"أستغفر الله"};
-  $("#cn").innerHTML=C.map(([id,t])=>{const v=c[id]||0;return `<div class="card cnt${v>=100||cks[id]?" done":""}"><div>${id=="dk1"||id=="dk2"?hh(t,id):`<h3>${t}</h3>`}<div style="font-size:14px">${names[id]}</div><button class="reset" data-r="${id}">تصفير</button></div><button class="c ${v>=100?"ok":""}" data-c="${id}">${v}<span style="font-size:11px;font-weight:400">/100</span></button></div>`}).join("");
-  const dd=DD[n%DD.length],done=S.dd[k];
-  $("#dd").innerHTML=`${hh("عمل اليوم: "+dd[0],"dd")}<p>${dd[1]}</p><p class="src">${dd[2]}</p>${sh("عمل يحبه الله: "+dd[0]+" — "+dd[2])}`;
-  ["vs","hd","lv","fb","dd"].forEach(i=>$("#"+i).classList.toggle("done",!!cks[i]));
+  const DL=[["dk1","ذكر اليوم ١",100],["dk2","ذكر اليوم ٢",100],["bn","ابني جنبتك اليوم",100],["du","دعاء اليوم",3],["hd","حديث اليوم"],["sh","صحابيّ اليوم"],["sr","سيرة اليوم"],["fb","حجات ربنا حرّمها منتشرة بينا"],["lv","حجات ربنا بيحبها"],["dd","عمل اليوم وفضله"],["ij","إعجاز اليوم"],["bd","بدعة اليوم"],["sm","سنة مهجورة اليوم"],["kz","حديث مكذوب عن الرسول ﷺ اليوم"],["gh","خطأ اليوم في الاغتسال"],["wd","خطأ اليوم في الوضوء"],["sl","خطأ اليوم في الصلاة"],["im","خطأ اليوم في الإمامة"],["fa","فضل عمل اليوم"]];
+  $("#dly").innerHTML=DL.map(([id,t,N])=>{
+    let e=id=="dk1"?[D[n%D.length],"",""]:id=="dk2"?[D[(n+13)%D.length],"",""]:(CT[id]&&CT[id].length?CT[id][n%CT[id].length]:["قريبًا إن شاء الله","",""]);
+    if(N){const v=c[id]||0,dn=v>=N||cks[id];return `<div class="card cnt${dn?" done":""}"><div>${hh(t,id)}<div class="ctx">${e[0]}</div>${e[1]?`<div class="cbd">${e[1]}</div>`:""}${e[2]?`<div class="src">${e[2]}</div>`:""}<button class="reset" data-r="${id}">تصفير</button></div><button class="c ${v>=N?"ok":""}" data-c="${id}" data-n="${N}">${v}<span style="font-size:11px;font-weight:400">/${N}</span></button></div>`}
+    return `<div class="card${cks[id]?" done":""}">${hh(t,id)}<p><b>${e[0]}</b></p>${e[1]?`<p>${e[1]}</p>`:""}${e[2]?`<p class="src">${e[2]}</p>`:""}${sh(t+": "+e[0]+(e[1]?" — "+e[1]:""))}${["bn","hd","bd","sm","kz","gh","wd","sl","im","fa","fb","lv","dd"].includes(id)?`<p class="vf">راجع الدليل: <a target="_blank" rel="noopener" href="https://dorar.net/hadith/search?q=${encodeURIComponent((e[0].length>24?e[0]:e[0]+" "+e[1]).replace(/[«»"]/g,"").slice(0,80))}">الدرر السنية</a> · <a target="_blank" rel="noopener" href="https://sunnah.com/search?q=${encodeURIComponent(e[0].replace(/[«»"]/g,"").slice(0,60))}">sunnah.com</a></p>`:""}</div>`}).join("");
+  const PL=["ترك الدخان والمسكرات والمخدرات","ترك العلاقات المحرمة بكل أنواعها من أصغرها لأكبرها، وترك النظر للمحرمات","ترك المكسب الحرام ومنه بيع الدخان والسجائر","ترك حلق اللحية ولبس الذهب والحرير وكثرة الخواتم والوشم كشاب مسلم","ترك اللبس الذي يصف الجسد والمكياج والتزيين والبرفان، ولبس ما أمر الله به كامرأة مسلمة","ترك صفة الدياثة، وأمر زوجتي وبناتي باللباس الذي أمر الله به لرضا الله كرجل مسلم","ترك أي معاملات ربوية والعمل في مؤسسات تتعامل بالربا من أصغره لأكبره","ترك الظلم بكل أنواعه من أكبره لأصغره","ترك الحقد والحسد والغل والنميمة من أكبرها لأصغرها","ترك عمل وحضور الأفراح التي فيها المعازف والمحرمات والاختلاط والرقص","ترك الشحناء والخصام والغلظة في المعاملة والتكبر","ترك الانضمام لطوائف وجماعات، وأن أكون مخلصًا لله وحده: صلاتي ونسكي ومحياي ومماتي لله رب العالمين","ترك الشكوى من أمير الدولة، وأن أقدّم حلولًا وأكون إيجابيًا: «من رأى من أميره شيئًا يكرهه فليصبر عليه، فإنه ليس أحد يفارق الجماعة شبرًا فيموت إلا مات ميتة جاهلية» متفق عليه"],pl=S.pl||{};
+  $("#pls").innerHTML=PL.map((t,i)=>[t,i]).sort((a,b)=>(pl[a[1]]?1:0)-(pl[b[1]]?1:0)||a[1]-b[1]).map(([t,i])=>`<div class="pld${pl[i]?" on":""}" data-pl="${i}" role="button">${pl[i]?"✓ ":""}${t}</div>`).join("");
   renderAz();
 }
 
@@ -281,7 +292,7 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("button");if(!t)return;
   const k=key(dk(off));
   if(t.dataset.i){cur=+t.dataset.i;render()}
-  else if(t.dataset.c){const c=S.cnt[k];c[t.dataset.c]=(c[t.dataset.c]||0)+1;if(c[t.dataset.c]==100&&navigator.vibrate)navigator.vibrate(200);save();render()}
+  else if(t.dataset.c){const c=S.cnt[k];c[t.dataset.c]=(c[t.dataset.c]||0)+1;if(c[t.dataset.c]==+(t.dataset.n||100)&&navigator.vibrate)navigator.vibrate(200);save();render()}
   else if(t.dataset.r){S.cnt[k][t.dataset.r]=0;save();render()}
   else if(t.dataset.dd){S.dd[k]=S.dd[k]?0:1;save();render()}
   else if(t.dataset.s){const s=t.dataset.s;if(navigator.share)navigator.share({text:s}).catch(()=>{});else if(navigator.clipboard){navigator.clipboard.writeText(s);toast("تم النسخ للمشاركة")}}
@@ -299,6 +310,7 @@ document.addEventListener("pointerdown",e=>{lpDone=false;clearTimeout(lpT);const
 ["pointerup","pointercancel","pointermove"].forEach(ev=>document.addEventListener(ev,()=>clearTimeout(lpT)));
 document.addEventListener("contextmenu",e=>{if(e.target.closest(".tk"))e.preventDefault()});
 document.addEventListener("click",e=>{const k=key(dk(off));
+  const pl=e.target.closest(".pld");if(pl){S.pl=S.pl||{};S.pl[pl.dataset.pl]=S.pl[pl.dataset.pl]?0:1;save();render();if(S.pl[pl.dataset.pl]&&navigator.vibrate)navigator.vibrate(60);return}
   const c2=e.target.closest(".ck");if(c2){S.ck=S.ck||{};const o=S.ck[k]=S.ck[k]||{};o[c2.dataset.ck]=o[c2.dataset.ck]?0:1;save();render();if(o[c2.dataset.ck]&&navigator.vibrate)navigator.vibrate(40);return}
   if(lpDone&&e.target.closest(".tk")){lpDone=false;return}
   const pt=e.target.closest(".ptm");if(pt){e.stopPropagation();editTime(pt.dataset.pt);return}
@@ -387,15 +399,15 @@ function azList(sc){
   if(sc==="q")return qList(key(dk(off)));
   if(sc==="m")return AZ_M.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
   if(sc==="e")return AZ_E.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
-  if(sc==="s")return AZ_S.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
+  if(sc==="s")return AZ_S.map(a=>({t:a[0],c:a[1],n:a[2]||""})).concat([{t:"سورة السجدة",c:1,sr:31,n:""},{t:"سورة الملك",c:1,sr:66,n:""}]);
   return AZ_A.filter(a=>!a[3]||(a[3]==="fm"?fm:id==="fajr")).map(a=>({t:a[0],c:(a[4]&&fm)?3:a[1],n:a[2]||""}));
 }
 const azKey=sc=>sc==="a"?"a-"+P[cur][0]:sc;
-const azTitle={m:"أذكار الصباح",e:"أذكار المساء",s:"أذكار النوم",a:"أذكار ختام الصلاة",q:"ورد القرآن"};
-// ورد القرآن: 10 صفحات كل يوم من مصحف 604 صفحة، والتقدم محفوظ ومش مربوط بالتاريخ (لو ما خلصتش النهارده يطلعلك نفس الصفحات بكرة)
-const QP=604,QD=10;
-const qStart=k=>S.qd[k]||((S.q.p%QP)+1);
-function qList(k){const s=qStart(k),n=Math.max(1,Math.min(QD,QP-s+1));return Array.from({length:n},(_,i)=>({t:"صفحة "+(s+i),c:1,n:"اضغط بعد ما تخلص قراءتها",q:s+i}))}
+const azTitle={m:"أذكار الصباح",e:"أذكار المساء",s:"أذكار النوم",a:"أذكار ختام الصلاة",q:"اقرأ ورتل كما كنت ترتل في الدنيا"};
+// اقرأ ورتل: قراءة حرة من غير هدف يومي. مكان الوقوف (S.q.p) محفوظ ومش مربوط بالتاريخ: لو قرأت صفحتين النهارده بكرة تكمل من الصفحة اللي بعدهم.
+const QP=604;
+const qMark=()=>(S.q.p%QP)+1;
+function qList(){const p=qMark();return [{t:"صفحة "+p,c:1,n:"",q:p}]}
 const QA="٠١٢٣٤٥٦٧٨٩",qn=n=>String(n).replace(/\d/g,d=>QA[d]);
 let QC=null;
 function qPageHTML(pn){
@@ -411,42 +423,55 @@ const KHATM=["اللَّهُمَّ ارْحَمْنِي بِالْقُرْآنِ
 function showKhatm(){$("#khs").textContent="ختمة رقم "+S.q.k+" ✨ والختمة الجديدة بتبدأ تلقائي من الصفحة 1 إن شاء الله";
   $("#khd").innerHTML=KHATM.map(t=>"<p style='margin:0 0 10px'>"+t+"</p>").join("");$("#khm").classList.add("show");document.body.style.overflow="hidden";try{navigator.vibrate&&navigator.vibrate([150,80,150])}catch(e){}}
 function hideKhatm(){S.q.pend=0;save();$("#khm").classList.remove("show");if(!azSc)document.body.style.overflow="";if(azSc==="q"){azRefresh()}renderAz()}
-function qCheck(k){const L=qList(k),c=((S.az[k]||{}).q)||[],n=L.length,all=L.every((a,i)=>(c[i]||0)>=1),f=S.qf[k];
-  if(all&&!f){S.q.p+=n;const kh=S.q.p>=QP;S.qf[k]={n:n,kh:kh?1:0};if(kh){S.q.p=0;S.q.k++;S.q.pend=1}save();if(kh)showKhatm()}
-  else if(!all&&f){if(f.kh){S.q.p=QP-f.n;S.q.k=Math.max(0,S.q.k-1);S.q.pend=0}else S.q.p=Math.max(0,S.q.p-f.n);delete S.qf[k];save()}}
+function qRender(){const pg=qMark(),td=S.qt[key(new Date())]||0;
+  $("#azl").innerHTML='<div class="qbar"><span>📖 قرأت اليوم '+qn(td)+' صفحة · مكان وقوفك: صفحة '+qn(pg)+'</span><span><button class="qx" id="qundo">↩ رجوع صفحة</button> <button class="qx" id="qgo">📍 غيّر مكاني</button></span></div>'+azItemHTML({t:"صفحة "+pg,c:1,q:pg},0,0);
+  $("#azl").scrollTop=0}
+function qDone(){const k=key(new Date());S.qt[k]=(S.qt[k]||0)+1;S.q.p+=1;let kh=false;
+  if(S.q.p>=QP){S.q.p=0;S.q.k++;S.q.pend=1;kh=true}
+  save();try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}
+  qRender();azBar();if(kh)showKhatm()}
+function qUndo(){const k=key(new Date());
+  if(S.q.p>0)S.q.p-=1;else if(S.q.k>0){S.q.k-=1;S.q.p=QP-1}else return;
+  if(S.qt[k]>0)S.qt[k]-=1;S.q.pend=0;save();qRender();azBar()}
+function qGoto(){const v=prompt("ابدأ القراءة من صفحة رقم كام؟ (1 - 604)",String(qMark()));if(v===null)return;
+  const n=parseInt(String(v).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)),10);
+  if(!n||n<1||n>QP){toast("اكتب رقم من 1 لـ 604");return}
+  S.q.p=n-1;save();qRender();azBar()}
 function azCounts(sc){const k=key(dk(off));return ((S.az[k]||{})[azKey(sc)])||[]}
-function azStat(sc){const L=azList(sc),c=azCounts(sc);let d=0;L.forEach((a,i)=>{if((c[i]||0)>=a.c)d++});return{d,n:L.length}}
+function azStat(sc){if(sc==="q")return{d:S.q.p,n:QP};const L=azList(sc),c=azCounts(sc);let d=0;L.forEach((a,i)=>{if((c[i]||0)>=a.c)d++});return{d,n:L.length}}
 function renderAz(){
   const C=2*Math.PI*46;
   $("#az").innerHTML=["q","m","e","s","a"].map(sc=>{const st=azStat(sc),pc=st.n?st.d/st.n:0,all=st.n&&st.d===st.n;
-    const nm=sc==="a"?"ختام<br>"+P[cur][1]:sc==="q"?"ورد<br>القرآن":azTitle[sc].replace("أذكار ","أذكار<br>");
+    const nm=sc==="a"?"ختام<br>"+P[cur][1]:sc==="q"?"اقرأ<br>ورتل":azTitle[sc].replace("أذكار ","أذكار<br>");
     return `<button class="azc${all?" all":""}${sc==="q"?" qr":""}" data-az="${sc}"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="var(--ln)" stroke-width="5"/><circle cx="50" cy="50" r="46" fill="none" stroke="var(--pri)" stroke-width="5" stroke-linecap="round" stroke-dasharray="${(pc*C).toFixed(1)} ${C.toFixed(1)}"/></svg><span class="in"><b>${all?"✓ ":""}${nm}</b><small>${st.d} / ${st.n}</small></span></button>`}).join("");
 }
 let azSc=null;
+function srHTML(x){return (window.QT?"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ":"")+(window.QT?QT[x].map((t,j)=>t+" ﴿"+(j+1)+"﴾").join(" "):"جاري التحميل…")}
 function azItemHTML(a,i,v){const done=v>=a.c;
+  if(a.sr!=null)return `<div class="it qi${done?" ok":""}" data-i="${i}"><div class="bd"><div class="qh">${a.t}</div><div class="qt">${srHTML(a.sr)}</div><button class="qb">${done?"✓ قرأتها":"✓ قرأت "+a.t}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
   if(a.q)return `<div class="it qi${done?" ok":""}" data-i="${i}"><div class="bd"><div class="qh">${a.t}</div><div class="qt">${qPageHTML(a.q)}</div><button class="qb">${done?"✓ تمت قراءة الصفحة":"✓ خلصت الصفحة "+qn(a.q)}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
   return `<div class="it${done?" ok":""}" data-i="${i}"><div class="bd"><div class="tx">${a.t}</div>${a.n?`<div class="nt">${a.n}</div>`:""}${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div><div class="ct">${done?"✓":(a.c-v)}<small>${done?"تم":"متبقي"}</small></div></div>`}
-function azBar(){const st=azStat(azSc);$("#azbar").style.width=(st.n?st.d/st.n*100:0)+"%";$("#azp").textContent=azSc==="q"?st.d+" من "+st.n+" صفحة"+(st.d===st.n?" ✓ تقبل الله":"")+" · تقدم الختمة "+S.q.p+"/"+QP+(S.q.k?" · ختمات: "+S.q.k:""):st.d+" من "+st.n+" ذكر"+(st.d===st.n?" ✓ تقبل الله":"")}
+function azBar(){const st=azStat(azSc);$("#azbar").style.width=(st.n?st.d/st.n*100:0)+"%";$("#azp").textContent=azSc==="q"?"قرأت اليوم "+qn(S.qt[key(new Date())]||0)+" صفحة · تقدم الختمة "+S.q.p+"/"+QP+(S.q.k?" · ختمات: "+S.q.k:""):st.d+" من "+st.n+" ذكر"+(st.d===st.n?" ✓ تقبل الله":"")}
 function azOpen(sc){azSc=sc;const L=azList(sc),c=azCounts(sc);
-  $("#azt").textContent=sc==="a"?"أذكار ختام صلاة "+P[cur][1]:sc==="q"?"ورد القرآن: صفحة "+L[0].q+" إلى "+L[L.length-1].q:azTitle[sc];
-  $("#azl").innerHTML=L.map((a,i)=>azItemHTML(a,i,c[i]||0)).join("");$("#azl").scrollTop=0;azBar();
+  $("#azt").textContent=sc==="a"?"أذكار ختام صلاة "+P[cur][1]:azTitle[sc];
+  if(sc==="q")qRender();else{$("#azl").innerHTML=L.map((a,i)=>azItemHTML(a,i,c[i]||0)).join("");$("#azl").scrollTop=0}azBar();
   $("#azm").classList.add("show");document.body.style.overflow="hidden";
   try{history.pushState({az:1},"")}catch(e){}}
-function azRefresh(){const L=azList(azSc),c=azCounts(azSc);$("#azl").innerHTML=L.map((a,i)=>azItemHTML(a,i,c[i]||0)).join("");azBar()}
+function azRefresh(){if(azSc==="q"){qRender();azBar();return}const L=azList(azSc),c=azCounts(azSc);$("#azl").innerHTML=L.map((a,i)=>azItemHTML(a,i,c[i]||0)).join("");azBar()}
 function azClose(){if(!azSc)return;azSc=null;$("#azm").classList.remove("show");document.body.style.overflow="";renderAz();}
 window.addEventListener("popstate",()=>azClose());
-function azSet(i,fn){const k=key(dk(off));if(azSc==="q"&&!S.qd[k])S.qd[k]=qStart(k);const L=azList(azSc),kk=azKey(azSc);
+function azSet(i,fn){const k=key(dk(off));const L=azList(azSc),kk=azKey(azSc);
   const box=(S.az[k]=S.az[k]||{});const arr=(box[kk]=box[kk]||[]);
   const before=arr[i]||0;arr[i]=Math.max(0,Math.min(L[i].c,fn(before,L[i].c)));save();
   const el=$("#azl").children[i];const tmp=document.createElement("div");tmp.innerHTML=azItemHTML(L[i],i,arr[i]);el.className=tmp.firstChild.className;el.innerHTML=tmp.firstChild.innerHTML;azBar();
-  if(azSc==="q"){qCheck(k);azBar()}
   if(before<L[i].c&&arr[i]>=L[i].c){try{navigator.vibrate&&navigator.vibrate(80)}catch(e){}
     const nx=azList(azSc).findIndex((a,j)=>j>i&&(arr[j]||0)<a.c);const ne=nx>=0&&$("#azl").children[nx];if(ne)setTimeout(()=>{try{ne.scrollIntoView({behavior:"smooth",block:azSc==="q"?"start":"center"})}catch(e){}},250)}
   else if(arr[i]>before){try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}}}
 document.addEventListener("click",e=>{
   const c=e.target.closest(".azc");if(c){azOpen(c.dataset.az);return}
   if(e.target.closest("#azx")){if(history.state&&history.state.az){history.back()}else azClose();return}
-  if(e.target.closest("#azr")){if(azSc&&confirm("تصفير كل أذكار القايمة دي؟")){const k=key(dk(off));if(S.az[k])delete S.az[k][azKey(azSc)];save();if(azSc==="q")qCheck(k);azRefresh()}return}
+  if(azSc==="q"){if(e.target.closest(".qb")){qDone();return}if(e.target.closest("#qundo")){qUndo();return}if(e.target.closest("#qgo")){qGoto();return}}
+  if(e.target.closest("#azr")){if(azSc==="q"){if(confirm("ترجع لأول المصحف (صفحة 1)؟")){S.q.p=0;save();azRefresh()}return}if(azSc&&confirm("تصفير كل أذكار القايمة دي؟")){const k=key(dk(off));if(S.az[k])delete S.az[k][azKey(azSc)];save();azRefresh()}return}
   const r=e.target.closest(".rs");if(r){e.stopPropagation();azSet(+r.dataset.ri,()=>0);return}
   const it=e.target.closest(".it");if(it&&azSc!==null){if(azSc==="q"&&!e.target.closest(".qb"))return;azSet(+it.dataset.i,(v)=>v+1)}
 });

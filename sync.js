@@ -5,9 +5,9 @@ if(!C||!C.apiKey){if(btn)btn.style.display="none";return}
 let db,auth,uid=null,unsub=null,pt=null,ready=false;
 const B="https://www.gstatic.com/firebasejs/10.12.2/",ld=u=>new Promise((r,j)=>{const s=document.createElement("script");s.src=B+u;s.onload=r;s.onerror=j;document.head.appendChild(s)});
 const setBtn=()=>{btn.textContent=uid?"☁️ متزامن ✓":"☁️ تسجيل الدخول بجوجل"};
-const norm=()=>{["pr","tk","ck","pl","days","cnt","az","tm","cal","ov","dd","qd","qf","qt"].forEach(f=>S[f]=S[f]||{});S.q=Object.assign({p:0,k:0,pend:0},S.q||{})};
+const norm=()=>{["pr","tk","ck","pl","days","cnt","az","tm","cal","ov","dd","qd","qf","qt","jm","tkd"].forEach(f=>S[f]=S[f]||{});S.q=Object.assign({p:0,k:0,pend:0},S.q||{})};
 function merge(a,b){const m=JSON.parse(JSON.stringify(a));
- ["pr","ck","pl","cnt","az","dd","days","tm","cal","ov","qd","qf","qt"].forEach(f=>{m[f]=m[f]||{};Object.keys(b[f]||{}).forEach(k=>{if(!(k in m[f]))m[f][k]=b[f][k]})});
+ ["pr","ck","pl","cnt","az","dd","days","tm","cal","ov","qd","qf","qt","jm","tkd"].forEach(f=>{m[f]=m[f]||{};Object.keys(b[f]||{}).forEach(k=>{if(!(k in m[f]))m[f][k]=b[f][k]})});
  m.tk=m.tk||{};Object.keys(b.tk||{}).forEach(d=>{if(!m.tk[d]){m.tk[d]=b.tk[d];return}b.tk[d].forEach(t=>{const e=m.tk[d].find(x=>x.t===t.t);if(!e)m.tk[d].push(t);else if(t.x)e.x=1})});
  return m}
 function apply(r){Object.keys(S).forEach(k=>delete S[k]);Object.assign(S,r);norm();

@@ -70,6 +70,13 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .qt .an{color:var(--pri);font-size:19px}
 .qb{display:block;width:100%;margin-top:10px;border:2px solid var(--pri);background:var(--card);color:var(--pri);border-radius:14px;padding:10px;font:inherit;font-size:16px;font-weight:700;cursor:pointer}
 .qi.ok .qb{background:var(--pri);color:#fff}
+.qimg{background:#fff;border-radius:10px;overflow:hidden;margin:4px 0 2px;min-height:120px;text-align:center}
+.qimg img{display:block;width:100%;height:auto}
+.qimg+.qimg{margin-top:8px}
+.it{position:relative}
+.ick{flex:none;width:32px;height:32px;border-radius:50%;border:2px solid var(--pri);background:var(--card);color:#fff;font-size:18px;line-height:1;padding:0;cursor:pointer;align-self:flex-start}
+.ick.on{background:var(--pri)}
+.qi .ick{position:absolute;top:8px;left:8px;z-index:2}
 .qbar{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;align-items:center;font-size:13px;color:var(--mut);margin:0 0 8px}.qx{border:1px solid var(--ln);background:var(--card);color:var(--mut);border-radius:10px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer}
 .khm{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:40;display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 .khm.show{display:flex}
@@ -102,6 +109,11 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .it.ok{opacity:.55;border-color:var(--pri)}.it.ok .ct{background:var(--pri);color:#fff}
 .it .rs{border:0;background:none;color:var(--mut);font-size:12px;cursor:pointer;padding:0}
 .prs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 6px}
+.pr{position:relative}
+.jm{position:absolute;top:3px;left:3px;width:28px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:8px;opacity:.3;filter:grayscale(1);transition:opacity .2s}
+.jm img{width:20px;height:auto;display:block;pointer-events:none}
+.jm.on{opacity:1;filter:none;background:#fff}
+.pr b{padding:0 2px;margin-top:10px}
 .pr{border:1.5px solid var(--ln);background:var(--card);border-radius:14px;padding:8px 2px;text-align:center;cursor:pointer;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 .pr b{display:block;font-size:13px;line-height:1.35;min-height:35px;display:flex;align-items:center;justify-content:center}.pr .ptm{display:inline-block;font-size:12px;color:var(--mut);padding:2px 6px}
 .pr.now{border-color:var(--pri)}.pr.on{background:var(--pri);border-color:var(--pri);color:#fff}.pr.on .ptm{color:#e6f4ec}
@@ -113,7 +125,7 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .tk{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--acc);border-radius:22px;padding:8px 14px;font-size:15px;cursor:pointer;-webkit-user-select:none;user-select:none}
 .tk.on{background:var(--pri);border-color:var(--pri);color:#fff}
 .tk{transition:transform .65s ease-out,opacity .65s ease-out,filter .65s ease-out,background .2s,color .2s}
-.tk.poof{background:var(--pri);border-color:var(--pri);color:#fff;opacity:0;filter:blur(8px);transform:translateY(-34px) scale(1.25)}
+.tk.on span{font-weight:700}
 .tkx{border:0;background:none;color:inherit;opacity:.6;font-size:13px;cursor:pointer;padding:0 2px}
 .mid .rs,#tks .rs{border:0;background:none;color:var(--mut);font:inherit;font-size:12.5px;margin-top:4px;cursor:pointer}
 .tk{-webkit-touch-callout:none}
@@ -221,12 +233,12 @@ const DH=H;
 const DV=[];[[1,2,6],[2,152,5],[2,255,3],[2,284,3],[3,133,8],[3,159,3],[3,190,6],[4,36,3],[4,58,3],[6,162,2],[7,199,3],[8,2,4],[9,111,3],[10,57,4],[11,114,3],[13,28,6],[14,7,3],[15,97,3],[16,90,5],[17,23,8],[18,107,4],[20,25,8],[21,87,4],[23,1,11],[24,35,5],[25,63,15],[26,78,10],[28,77,3],[29,45,2],[30,21,3],[31,12,8],[33,41,10],[33,70,3],[35,29,4],[39,53,10],[41,30,10],[49,10,9],[51,56,3],[59,18,7],[93,1,11],[94,1,8],[103,1,3],[112,1,4],[36,1,83],[67,1,30],[55,1,78],[56,1,96],[57,1,29]].forEach(a=>{for(let i=0;i<a[2];i++)DV.push([a[0],a[1]+i])});DV.length=Math.min(DV.length,360);
 const SHARE="الدال على الخير كفاعله، وأن تشارك فيصلك الأجر بإذن الله";
 
-let S={pr:{},tk:{},ck:{},days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{},qt:{}};
+let S={jm:{},tkd:{},pr:{},tk:{},ck:{},days:{},cnt:{},az:{},tm:{},cal:{},ov:{},dd:{},mot:"",snd:true,rem:10,q:{p:0,k:0,pend:0},qd:{},qf:{},qt:{}};
 try{S=Object.assign(S,JSON.parse(localStorage.getItem("yawmi")||"{}"))}catch(e){}
-delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.pr=S.pr||{};S.tk=S.tk||{};S.ck=S.ck||{};S.qd=S.qd||{};S.qf=S.qf||{};S.qt=S.qt||{};
+delete S.tpl;delete S.done;S.q=Object.assign({p:0,k:0,pend:0},S.q||{});S.pr=S.pr||{};S.tk=S.tk||{};S.ck=S.ck||{};S.qd=S.qd||{};S.qf=S.qf||{};S.qt=S.qt||{};S.jm=S.jm||{};S.tkd=S.tkd||{};
 // ترحيل مرة واحدة: اللي اتقرأ من صفحات "اليوم" القديمة (من غير ما اليوم يخلص) يتحسب في مكان الوقوف
 (function(){if(S.q.v)return;S.q.v=1;Object.keys(S.qd).forEach(k=>{if(S.qf[k])return;const st=S.qd[k],a=((S.az||{})[k]||{}).q||[];let c=0;while(c<10&&(a[c]||0)>=1)c++;if(c>0){const np=(st-1)+c;if(np>S.q.p&&np<604)S.q.p=np}})})();
-(function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd","pr","tk","ck"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
+(function(){const lim=Date.now()-90*864e5;["days","cnt","az","dd","pr","tk","ck","jm","tkd"].forEach(f=>{Object.keys(S[f]||{}).forEach(k=>{const [y,m,d]=k.split("-").map(Number);if(new Date(y,m-1,d).getTime()<lim)delete S[f][k]})})})();
 const save=()=>{S._t=Date.now();try{localStorage.setItem("yawmi",JSON.stringify(S))}catch(e){}if(window.__push)window.__push()};
 let off=0,cur=0;
 const dk=o=>{const d=new Date();d.setDate(d.getDate()+o);return d};
@@ -256,22 +268,24 @@ function fmt12(t){const [h,m]=t.split(":").map(Number);return (h%12||12)+":"+Str
 const toLat=x=>x.replace(/[٠-٩]/g,c=>"٠١٢٣٤٥٦٧٨٩".indexOf(c)).replace(/[٫.]/g,":");
 function to24(id,h){if(id==="duha")return h;if(id==="qiyam")return h>=9&&h<12?h+12:(h===12?0:h);if(h>=13||h===0)return h;if(id==="fajr")return h;if(id==="dhuhr")return h<11?h+12:h;return h<12?h+12:h}
 
+const DEFT="اصطحب أبناءك للمسجد اليوم";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function render(){
   const d=dk(off),k=key(d),n=dayN(d.getTime());
+  if(!S.tkd[k]){S.tkd[k]=1;const a=S.tk[k]=S.tk[k]||[];if(!a.some(t=>t.t===DEFT))a.unshift({t:DEFT,x:0});save()}
   if(!azSc)cur=curIdx();
   $("#dt").firstChild.textContent=d.toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
   let h="";try{h=d.toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"})}catch(e){}
   $("#hj").textContent=h;
-  const pd=S.pr[k]||{},tm=times(d);
+  const pd=S.pr[k]||{},jmd=S.jm[k]||{},tm=times(d);
   const cid=P[cur]?P[cur][0]:"";
-  $("#prs").innerHTML=PR.map(p=>`<div class="pr${pd[p[0]]?" on":""}${p[0]==cid&&off==0?" now":""}" data-p="${p[0]}" role="button"><b>${pd[p[0]]?"✓ ":""}${p[1]}</b><span class="ptm" data-pt="${p[0]}">${fmt12(tm[p[0]])}</span></div>`).join("");
+  $("#prs").innerHTML=PR.map(p=>`<div class="pr${pd[p[0]]?" on":""}${p[0]==cid&&off==0?" now":""}" data-p="${p[0]}" role="button"><span class="jm${jmd[p[0]]?" on":""}" data-jm="${p[0]}" role="button" aria-label="صليتها جماعة"><img src="icons/jamaa.png" alt=""></span><b>${pd[p[0]]?"✓ ":""}${p[1]}</b><span class="ptm" data-pt="${p[0]}">${fmt12(tm[p[0]])}</span></div>`).join("");
   $("#snd").textContent="🔔 الأذان: "+(S.snd?"تشغيل":"إيقاف");
   $("#rm").textContent="⏰ تذكير: "+(S.rem?S.rem+"د":"إيقاف");
   const tks=S.tk[k]||[],dn=tks.filter(t=>t.x).length;
-  $("#tks").innerHTML=tks.map((t,j)=>t.x?"":`<div class="tk" data-j="${j}" role="button"><span>${esc(t.t)}</span><button class="tkx" data-x="${j}" aria-label="حذف">✕</button></div>`).join("")
-   +(!tks.length?'<div class="hint" style="width:100%">اضغط + وضيف مهامك، واضغط على المهمة لما تخلصها فتتبخر</div>':(dn===tks.length?'<div class="hint" style="width:100%">ما شاء الله، خلصت كل مهامك ✨</div>':""))
-   +(dn?`<button class="rs" id="rvt" style="width:100%">↺ رجّع المهام اللي خلصت (${dn})</button>`:"");
+  $("#tks").innerHTML=tks.map((t,j)=>`<div class="tk${t.x?" on":""}" data-j="${j}" role="button"><span>${t.x?"✓ ":""}${esc(t.t)}</span><button class="tkx" data-x="${j}" aria-label="حذف">✕</button></div>`).join("")
+   +(!tks.length?'<div class="hint" style="width:100%">اضغط + وضيف مهامك، واضغط على المهمة لما تخلصها فتخضر وتفضل زي ما هي</div>':(dn===tks.length?'<div class="hint" style="width:100%">ما شاء الله، خلصت كل مهامك ✨</div>':""))
+   +(dn?`<button class="rs" id="rvt" style="width:100%">↺ صفّر علامات المهام (${dn})</button>`:"");
   const cks=(S.ck=S.ck||{})[k]||{},CT=Object.assign({},window.CT||{});
   const X=window.CT||{};CT.lv=L.map(x=>[x[0],x[1],SHARE]).concat(X.lv||[]);CT.fb=F.map(x=>[x[0],x[1],"لو واحد بس عرف إن ده حرام وتركه، لك مثل أجره."]).concat(X.fb||[]);CT.dd=DD.concat(X.dd||[]);
   const ck=id=>`<button class="ck${cks[id]?" on":""}" data-ck="${id}" aria-label="تمت">${cks[id]?"✓":""}</button>`;
@@ -314,10 +328,11 @@ document.addEventListener("click",e=>{const k=key(dk(off));
   const c2=e.target.closest(".ck");if(c2){S.ck=S.ck||{};const o=S.ck[k]=S.ck[k]||{};o[c2.dataset.ck]=o[c2.dataset.ck]?0:1;save();render();if(o[c2.dataset.ck]&&navigator.vibrate)navigator.vibrate(40);return}
   if(lpDone&&e.target.closest(".tk")){lpDone=false;return}
   const pt=e.target.closest(".ptm");if(pt){e.stopPropagation();editTime(pt.dataset.pt);return}
+  const jm=e.target.closest(".jm");if(jm){const o=S.jm[k]=S.jm[k]||{};o[jm.dataset.jm]=o[jm.dataset.jm]?0:1;save();render();if(o[jm.dataset.jm]&&navigator.vibrate)navigator.vibrate(40);return}
   const pr=e.target.closest(".pr");if(pr){const o=S.pr[k]=S.pr[k]||{};o[pr.dataset.p]=o[pr.dataset.p]?0:1;save();render();if(o[pr.dataset.p]&&navigator.vibrate)navigator.vibrate(40);return}
   const x=e.target.closest(".tkx");if(x){e.stopPropagation();if(confirm("حذف المهمة؟")){S.tk[k].splice(+x.dataset.x,1);save();render()}return}
   if(e.target.closest("#rvt")){S.tk[k].forEach(t=>t.x=0);save();render();return}
-  const tk=e.target.closest(".tk");if(tk&&!tk.classList.contains("poof")){const t=S.tk[k][+tk.dataset.j];tk.classList.add("poof");if(navigator.vibrate)navigator.vibrate(40);setTimeout(()=>{t.x=1;save();render()},650)}});
+  const tk=e.target.closest(".tk");if(tk){const t=S.tk[k][+tk.dataset.j];if(!t)return;t.x=t.x?0:1;save();render();if(t.x&&navigator.vibrate)navigator.vibrate(40)}});
 
 
 // ===== الأذكار: [النص, التكرار, ملاحظة, متى(fm=فجر ومغرب, f=فجر فقط), 3 مرات في الفجر والمغرب] =====
@@ -380,7 +395,7 @@ const AZ_A=[
 ];
 const AYAT="﴿آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ۝ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ﴾";
 const AZ_S=[
-[IKH,3,"اجمع كفيك وانفث فيهما، ثم اقرأ الإخلاص والفلق والناس وامسح بهما ما استطعت من جسدك، وكرر ذلك 3 مرات (البخاري)"],[FAL,3],[NAS,3],
+["سور الإخلاص والفلق والناس",3,"اجمع كفيك وانفث فيهما، ثم اقرأ الإخلاص والفلق والناس وامسح بهما ما استطعت من جسدك، وكرر ذلك 3 مرات (البخاري)",604],
 [KURSI,1,"آية الكرسي - لا يزال عليك من الله حافظ (البخاري)"],
 [AYAT,1,"آخر آيتين من سورة البقرة - كفتاه (متفق عليه)"],
 ["اقرأ سورة السجدة وسورة الملك",1,"كان النبي ﷺ لا ينام حتى يقرأهما (رواه الترمذي)"],
@@ -399,7 +414,7 @@ function azList(sc){
   if(sc==="q")return qList(key(dk(off)));
   if(sc==="m")return AZ_M.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
   if(sc==="e")return AZ_E.map(a=>({t:a[0],c:a[1],n:a[2]||""}));
-  if(sc==="s")return AZ_S.map(a=>({t:a[0],c:a[1],n:a[2]||""})).concat([{t:"سورة السجدة",c:1,sr:31,n:""},{t:"سورة الملك",c:1,sr:66,n:""}]);
+  if(sc==="s")return AZ_S.map(a=>a[3]?{t:a[0],c:a[1],n:a[2]||"",pg:[a[3]]}:{t:a[0],c:a[1],n:a[2]||""}).concat([{t:"سورة السجدة",c:1,sr:31,pg:[415,416,417],n:""},{t:"سورة الملك",c:1,sr:66,pg:[562,563,564],n:""}]);
   return AZ_A.filter(a=>!a[3]||(a[3]==="fm"?fm:id==="fajr")).map(a=>({t:a[0],c:(a[4]&&fm)?3:a[1],n:a[2]||""}));
 }
 const azKey=sc=>sc==="a"?"a-"+P[cur][0]:sc;
@@ -447,10 +462,18 @@ function renderAz(){
 }
 let azSc=null;
 function srHTML(x){return (window.QT?"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ":"")+(window.QT?QT[x].map((t,j)=>t+" ﴿"+(j+1)+"﴾").join(" "):"جاري التحميل…")}
+// صور مصحف التجويد الملون (islamicbook.ws/2/): رقم الصفحة = رقم صفحة مصحف المدينة
+const MI=n=>"https://www.islamicbook.ws/2/"+n+".jpg";
+const imgFb={};
+function imgHTML(pages,fb){const id="f"+Math.random().toString(36).slice(2,8);imgFb[id]=fb;
+  return pages.map(n=>`<div class="qimg"><img src="${MI(n)}" alt="صفحة ${qn(n)} من مصحف التجويد الملون" loading="lazy" decoding="async" data-fb="${id}"></div>`).join("")}
+document.addEventListener("error",e=>{const im=e.target;if(!im||im.tagName!=="IMG"||!im.dataset.fb)return;const w=im.parentNode,f=imgFb[im.dataset.fb];
+  if(f)w.outerHTML='<div class="qt">'+f()+'</div>';else{im.remove();w.insertAdjacentHTML("beforeend",'<div class="nt" style="padding:16px">تعذر تحميل صورة الصفحة، تأكد من الاتصال بالإنترنت</div>')}},true);
 function azItemHTML(a,i,v){const done=v>=a.c;
-  if(a.sr!=null)return `<div class="it qi${done?" ok":""}" data-i="${i}"><div class="bd"><div class="qh">${a.t}</div><div class="qt">${srHTML(a.sr)}</div><button class="qb">${done?"✓ قرأتها":"✓ قرأت "+a.t}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
-  if(a.q)return `<div class="it qi${done?" ok":""}" data-i="${i}"><div class="bd"><div class="qh">${a.t}</div><div class="qt">${qPageHTML(a.q)}</div><button class="qb">${done?"✓ تمت قراءة الصفحة":"✓ خلصت الصفحة "+qn(a.q)}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
-  return `<div class="it${done?" ok":""}" data-i="${i}"><div class="bd"><div class="tx">${a.t}</div>${a.n?`<div class="nt">${a.n}</div>`:""}${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div><div class="ct">${done?"✓":(a.c-v)}<small>${done?"تم":"متبقي"}</small></div></div>`}
+  if(a.pg&&a.sr==null)return `<div class="it qi${done?" ok":""}" data-i="${i}"><button class="ick${done?" on":""}" data-ik="${i}" aria-label="تمت">${done?"✓":""}</button><div class="bd"><div class="qh">${a.t}</div>${imgHTML(a.pg,null)}${a.n?`<div class="nt" style="margin-top:6px">${a.n}</div>`:""}<button class="qb">${done?"✓ قرأتها":"✓ قرأت"+(a.c>1?" ("+v+"/"+a.c+")":"")}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
+  if(a.sr!=null)return `<div class="it qi${done?" ok":""}" data-i="${i}"><button class="ick${done?" on":""}" data-ik="${i}" aria-label="تمت">${done?"✓":""}</button><div class="bd"><div class="qh">${a.t}</div>${imgHTML(a.pg,()=>srHTML(a.sr))}<button class="qb">${done?"✓ قرأتها":"✓ قرأت "+a.t}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
+  if(a.q)return `<div class="it qi${done?" ok":""}" data-i="${i}"><div class="bd"><div class="qh">${a.t}</div>${imgHTML([a.q],()=>qPageHTML(a.q))}<button class="qb">${done?"✓ تمت قراءة الصفحة":"✓ خلصت الصفحة "+qn(a.q)}</button>${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div></div>`;
+  return `<div class="it${done?" ok":""}" data-i="${i}"><button class="ick${done?" on":""}" data-ik="${i}" aria-label="تمت">${done?"✓":""}</button><div class="bd"><div class="tx">${a.t}</div>${a.n?`<div class="nt">${a.n}</div>`:""}${v>0?`<button class="rs" data-ri="${i}">↺ تصفير</button>`:""}</div><div class="ct">${done?"✓":(a.c-v)}<small>${done?"تم":"متبقي"}</small></div></div>`}
 function azBar(){const st=azStat(azSc);$("#azbar").style.width=(st.n?st.d/st.n*100:0)+"%";$("#azp").textContent=azSc==="q"?"قرأت اليوم "+qn(S.qt[key(new Date())]||0)+" صفحة · تقدم الختمة "+S.q.p+"/"+QP+(S.q.k?" · ختمات: "+S.q.k:""):st.d+" من "+st.n+" ذكر"+(st.d===st.n?" ✓ تقبل الله":"")}
 function azOpen(sc){azSc=sc;const L=azList(sc),c=azCounts(sc);
   $("#azt").textContent=sc==="a"?"أذكار ختام صلاة "+P[cur][1]:azTitle[sc];
@@ -472,8 +495,9 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#azx")){if(history.state&&history.state.az){history.back()}else azClose();return}
   if(azSc==="q"){if(e.target.closest(".qb")){qDone();return}if(e.target.closest("#qundo")){qUndo();return}if(e.target.closest("#qgo")){qGoto();return}}
   if(e.target.closest("#azr")){if(azSc==="q"){if(confirm("ترجع لأول المصحف (صفحة 1)؟")){S.q.p=0;save();azRefresh()}return}if(azSc&&confirm("تصفير كل أذكار القايمة دي؟")){const k=key(dk(off));if(S.az[k])delete S.az[k][azKey(azSc)];save();azRefresh()}return}
+  const ik=e.target.closest(".ick");if(ik&&azSc!==null&&azSc!=="q"){e.stopPropagation();azSet(+ik.dataset.ik,(v,c)=>v>=c?0:c);return}
   const r=e.target.closest(".rs");if(r){e.stopPropagation();azSet(+r.dataset.ri,()=>0);return}
-  const it=e.target.closest(".it");if(it&&azSc!==null){if(azSc==="q"&&!e.target.closest(".qb"))return;azSet(+it.dataset.i,(v)=>v+1)}
+  const it=e.target.closest(".it");if(it&&azSc!==null){if((azSc==="q"||it.classList.contains("qi"))&&!e.target.closest(".qb"))return;azSet(+it.dataset.i,(v)=>v+1)}
 });
 
 let ac;

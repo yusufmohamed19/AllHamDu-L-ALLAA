@@ -50,10 +50,14 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 .cnt button.c{width:76px;height:76px;border-radius:50%;border:3px solid var(--pri);background:var(--card);color:var(--tx);font:inherit;font-size:24px;font-weight:700;cursor:pointer;flex:none}
 .cnt button.c.ok{background:var(--pri);color:#fff}
 .reset{border:0;background:none;color:var(--mut);font-size:12px;cursor:pointer}
-.ban{position:fixed;left:12px;right:12px;bottom:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:560px;margin:0 auto;background:var(--pri);color:#fff;border-radius:14px;padding:12px 14px;display:none;align-items:center;z-index:9;box-shadow:0 4px 18px rgba(0,0,0,.25)}.ban>*+*{margin-right:10px}
-.ban.show{display:flex}.ban div{flex:1;font-size:14px}
-.ban button{border:0;border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer;flex:none}
-#go{background:#fff;color:var(--pri);font-weight:700}#no{background:transparent;color:#fff}
+.ban{position:fixed;left:12px;right:12px;bottom:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:640px;margin:0 auto;background:#111a26;color:#fff;border:1px solid #243244;border-radius:16px;padding:12px 14px;display:none;align-items:center;gap:12px;z-index:9;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.ban.show{display:flex}
+.ban .bi{width:46px;height:46px;border-radius:12px;flex:none}
+.ban .bx{flex:1;min-width:0}.ban .bx b{display:block;font-size:16px;line-height:1.5}.ban .bx p{margin:2px 0 0;font-size:13px;line-height:1.6;color:#aab6c4}
+.ban button{border:0;font:inherit;cursor:pointer;flex:none}
+#go{background:#0a84c6;color:#fff;font-weight:700;border-radius:12px;padding:10px 18px;font-size:15px}
+#no{background:transparent;color:#8d99a8;font-size:20px;padding:4px 6px;line-height:1}
+@media(max-width:520px){.ban{flex-wrap:wrap}.ban .bx{flex:1 1 calc(100% - 62px)}#go{flex:1}}
 .toast{position:fixed;top:10px;top:calc(10px + env(safe-area-inset-top,0px));left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);max-width:92%;text-align:center;background:var(--tx);color:var(--bg);padding:8px 16px;border-radius:20px;font-size:14px;display:none;z-index:10}
 
 .az{display:grid;grid-template-columns:repeat(5,1fr);grid-gap:6px;gap:6px;margin:14px 0 4px}
@@ -173,7 +177,7 @@ body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Na
 <div class="du" id="khd"></div></div>
 <div class="khf"><button class="g" id="khc">نسخ الدعاء</button><button id="khn">آمين، نبدأ ختمة جديدة من الفاتحة</button></div></div>
 
-<div class="ban" id="ban"><div id="bt">ضيف التطبيق على شاشة جهازك</div><button id="go">تثبيت التطبيق</button><button id="no">لاحقًا</button></div>
+<div class="ban" id="ban"><img class="bi" src="icons/icon-192.png" alt=""><div class="bx"><b>ثبّت «نظام المُسلم الذكي» على جهازك</b><p id="bt">ضيف التطبيق على شاشة جهازك</p></div><button id="go">ثبّت كتطبيق</button><button id="no" aria-label="إغلاق">✕</button></div>
 <div class="toast" id="ts"></div>
 
 <script src="quran.js" defer></script>
@@ -553,7 +557,7 @@ const standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").ma
 let dismissed=false;try{dismissed=Date.now()-(+localStorage.getItem("noinst")||0)<864e5}catch(e){}
 function showBan(txt,btn){if(standalone||dismissed)return;$("#bt").textContent=txt;$("#go").style.display=btn?"":"none";$("#ban").classList.add("show")}
 function hideBan(){$("#ban").classList.remove("show")}
-function offerInstall(){dp=window.__dp;showBan("ثبّت «يومي» كتطبيق على جهازك، يشتغل أونلاين وأوفلاين",true)}
+function offerInstall(){dp=window.__dp;showBan("هيبقى تطبيق لوحده على الموبايل أو الكمبيوتر، وتفتحه من أيقونته على طول من غير ما تدوّر على الرابط.",true)}
 window.__onDp=offerInstall;
 window.addEventListener("appinstalled",()=>{dp=null;hideBan();toast("تم تثبيت التطبيق ✅ ويشتغل بدون نت")});
 $("#go").onclick=()=>{
